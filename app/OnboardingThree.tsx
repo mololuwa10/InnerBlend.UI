@@ -1,5 +1,4 @@
 /* eslint-disable import/no-unresolved */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { Colors } from "@/constants/Colors";
 import { useNavigation } from "@react-navigation/native";
