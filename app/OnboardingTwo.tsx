@@ -1,17 +1,19 @@
-import React from "react";
-import {
-	Text,
-	View,
-	StyleSheet,
-	TouchableOpacity,
-	Image,
-	ActivityIndicator,
-} from "react-native";
+/* eslint-disable import/no-unresolved */
+
 import { Colors } from "@/constants/Colors";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { ChevronRight } from "lucide-react-native";
 import { useFonts } from "expo-font";
+import { ChevronRight } from "lucide-react-native";
+import React from "react";
+import {
+	ActivityIndicator,
+	Image,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from "react-native";
 
 export default function OnboardingTwo() {
 	const navigation = useNavigation<StackNavigationProp<any>>();

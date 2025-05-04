@@ -1,22 +1,25 @@
-import React, { useState } from "react";
+/* eslint-disable import/no-unresolved */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+import { Colors } from "@/constants/Colors";
+import { registerUser } from "@/lib/auth";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { router } from "expo-router";
+import { CheckCircle } from "lucide-react-native";
+import React, { useState } from "react";
 import {
-	View,
+	Alert,
+	KeyboardAvoidingView,
+	Platform,
+	ScrollView,
+	StyleSheet,
 	Text,
 	TextInput,
 	TouchableOpacity,
-	StyleSheet,
-	KeyboardAvoidingView,
-	ScrollView,
-	Platform,
-	Alert,
+	View,
 } from "react-native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { useNavigation } from "@react-navigation/native";
-import { Colors } from "@/constants/Colors";
-import { CheckCircle } from "lucide-react-native";
 import Toast from "react-native-toast-message";
-import { registerUser } from "@/lib/auth";
 
 export default function SignUpScreen() {
 	const navigation = useNavigation<StackNavigationProp<any>>();

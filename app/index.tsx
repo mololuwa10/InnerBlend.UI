@@ -1,3 +1,5 @@
+/* eslint-disable import/no-unresolved */
+
 import { Colors } from "@/constants/Colors";
 import { fetchUserDetails } from "@/lib/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";

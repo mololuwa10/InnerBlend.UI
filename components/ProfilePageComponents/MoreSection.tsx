@@ -1,10 +1,9 @@
-import { Text, View, ScrollView, TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
-import FirstSection from "../MoreSectionComponents/FirstSection";
-import ThirdSection from "../MoreSectionComponents/ThirdSection";
-import FourthSection from "../MoreSectionComponents/FourthSection";
 import { DarkColors } from "@/constants/Colors";
+import React from "react";
+import { ScrollView, Text, View } from "react-native";
+import FirstSection from "../MoreSectionComponents/FirstSection";
+import FourthSection from "../MoreSectionComponents/FourthSection";
+import ThirdSection from "../MoreSectionComponents/ThirdSection";
 
 export default function MoreSection() {
 	return (

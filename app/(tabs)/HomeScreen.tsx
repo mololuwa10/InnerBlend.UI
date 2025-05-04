@@ -1,16 +1,17 @@
+/* eslint-disable import/no-unresolved */
+
+import { DarkColors } from "@/constants/Colors";
+import { Ionicons } from "@expo/vector-icons";
+import { Plus } from "lucide-react-native";
 import React from "react";
 import {
-	View,
-	Text,
-	StyleSheet,
-	TextInput,
 	ScrollView,
+	StyleSheet,
+	Text,
+	TextInput,
 	TouchableOpacity,
-	SafeAreaView,
+	View,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { Colors, DarkColors } from "@/constants/Colors";
-import { Plus } from "lucide-react-native";
 
 export default function HomeScreen() {
 	return (

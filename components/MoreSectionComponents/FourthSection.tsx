@@ -1,10 +1,13 @@
-import { Text, View, ScrollView, TouchableOpacity, Alert } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
-import { useLogout } from "@/lib/auth";
-import { useNavigation, CommonActions } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+/* eslint-disable import/no-unresolved */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { DarkColors } from "@/constants/Colors";
+import { useLogout } from "@/lib/auth";
+import { Ionicons } from "@expo/vector-icons";
+import { CommonActions, useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import React from "react";
+import { Alert, Text, TouchableOpacity, View } from "react-native";
 
 // type RootStackParamList = {
 // 	Login: undefined;

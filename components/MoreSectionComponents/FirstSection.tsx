@@ -1,11 +1,14 @@
-import { Text, View, ScrollView, TouchableOpacity } from "react-native";
-import { fetchUserDetails, UserDetails } from "@/lib/auth";
-import React, { useCallback, useEffect, useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { useNavigation } from "@react-navigation/native";
-import { useFocusEffect } from "expo-router";
+/* eslint-disable import/no-unresolved */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { DarkColors } from "@/constants/Colors";
+import { fetchUserDetails, UserDetails } from "@/lib/auth";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useFocusEffect } from "expo-router";
+import React, { useCallback, useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 
 type RootStackParamList = {
 	Navigation: undefined;

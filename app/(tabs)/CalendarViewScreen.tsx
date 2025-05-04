@@ -1,17 +1,19 @@
-import React, { useState } from "react";
-import {
-	View,
-	Text,
-	StyleSheet,
-	FlatList,
-	Dimensions,
-	TouchableOpacity,
-	TextInput,
-} from "react-native";
-import { CalendarList } from "react-native-calendars";
+/* eslint-disable import/no-unresolved */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { DarkColors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { Plus } from "lucide-react-native";
+import React, { useState } from "react";
+import {
+	Dimensions,
+	StyleSheet,
+	Text,
+	TextInput,
+	TouchableOpacity,
+	View,
+} from "react-native";
+import { CalendarList } from "react-native-calendars";
 
 const { width } = Dimensions.get("window");
 
