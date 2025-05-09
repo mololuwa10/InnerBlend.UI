@@ -83,6 +83,8 @@ export default function LogInScreen() {
 							setErrors((prev) => ({ ...prev, email: "" }));
 						}}
 						placeholderTextColor={Colors.accent}
+						keyboardType="email-address"
+						inputMode="email"
 					/>
 					{errors.UsernameOrEmail ? (
 						<Text style={styles.errorText}>{errors.UsernameOrEmail}</Text>

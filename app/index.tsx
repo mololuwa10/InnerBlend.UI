@@ -28,61 +28,36 @@ export default function Index() {
 				const isNew = await AsyncStorage.getItem("isNewUser");
 
 				if (isNew !== null && isNew !== "true") {
+					const token = await AsyncStorage.getItem("token");
+					if (!token) {
+						router.replace("/");
+						return;
+					}
+
 					const userDetails = await fetchUserDetails();
 					if (userDetails) {
 						router.replace("/(tabs)/HomeScreen");
 					} else {
-						router.replace("/");
+						navigation.navigate("index");
+						// router.replace("/");
 					}
+				} else {
+					// router.replace("/");
+					navigation.navigate("index");
 				}
 			} catch (error) {
 				console.error("Error checking auth: ", error);
-				router.replace("/LogInScreen");
+				// router.replace("/");
+				navigation.navigate("index");
 			} finally {
 				setLoading(false);
 			}
 		};
 
-		setTimeout(() => {
-			checkAuth();
-		}, 3000);
-	}, []);
+		const timeout = setTimeout(checkAuth, 3000);
 
-	useEffect(() => {
-		const checkAuth = async () => {
-			try {
-				const isNew = await AsyncStorage.getItem("isNewUser");
-
-				if (isNew !== null && isNew !== "true") {
-					const token = await AsyncStorage.getItem("token");
-
-					if (token) {
-						const userDetails = await fetchUserDetails();
-
-						if (userDetails) {
-							router.replace("/(tabs)/HomeScreen");
-						} else {
-							// Invalid token or failed fetch - redirect to login
-							router.replace("/LogInScreen");
-						}
-					} else {
-						// No token found, new or logged out user stays here
-						// Optionally you can send them to login
-						router.replace("/LogInScreen");
-					}
-				}
-			} catch (error) {
-				console.error("Error checking auth: ", error);
-				router.replace("/LogInScreen");
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		setTimeout(() => {
-			checkAuth();
-		}, 3000);
-	}, []);
+		return () => clearTimeout(timeout); // Clean up on unmount
+	}, [router]);
 
 	if (loading) {
 		return (

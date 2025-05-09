@@ -1,10 +1,13 @@
 /* eslint-disable import/no-unresolved */
 
+import JournalCard from "@/components/HomeScreenComponents/JournalCard";
 import { DarkColors } from "@/constants/Colors";
+import { getJournals, Journal } from "@/lib/apiGetActions";
 import { Ionicons } from "@expo/vector-icons";
 import { Plus } from "lucide-react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
+	ActivityIndicator,
 	ScrollView,
 	StyleSheet,
 	Text,
@@ -14,6 +17,25 @@ import {
 } from "react-native";
 
 export default function HomeScreen() {
+	const [journals, setJournals] = useState<Journal[]>([]);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		const fetchJournals = async () => {
+			try {
+				const data = await getJournals();
+				if (data) {
+					setJournals(data);
+				}
+			} catch (err) {
+				console.error("Failed to load journals:", err);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		fetchJournals();
+	}, []);
 	return (
 		<View style={styles.wrapper}>
 			<ScrollView contentContainerStyle={styles.container}>
@@ -57,20 +79,37 @@ export default function HomeScreen() {
 				</ScrollView>
 
 				{/* Empty State */}
-				<View style={styles.emptyState}>
+
+				{/* Cards or Empty */}
+				{loading ? (
+					<ActivityIndicator size="large" color={DarkColors.accent} />
+				) : journals.length === 0 ? (
+					<View style={styles.emptyState}>
+						<Ionicons name="book-outline" size={40} color={DarkColors.accent} />
+						<Text style={styles.emptyTitle}>No journal entries.</Text>
+						<Text style={styles.emptySubtitle}>
+							Begin your journey by adding a new entry.
+						</Text>
+					</View>
+				) : (
+					journals.map((journal) => (
+						<JournalCard key={journal.journalId} journal={journal} />
+					))
+				)}
+				{/* <View style={styles.emptyState}>
 					<Ionicons name="book-outline" size={40} color={DarkColors.accent} />
 					<Text style={styles.emptyTitle}>No journal entries.</Text>
 					<Text style={styles.emptySubtitle}>
 						Begin your journey by adding a new entry.
 					</Text>
-				</View>
+				</View> */}
 			</ScrollView>
 
 			{/* New Entry Button */}
 			<TouchableOpacity style={styles.newEntryButton}>
 				<View style={styles.newEntryWrapper}>
 					<Plus color={DarkColors.textPrimary} size={22} />
-					<Text style={styles.newEntryText}>New Entry</Text>
+					<Text style={styles.newEntryText}>New Journal</Text>
 				</View>
 			</TouchableOpacity>
 		</View>

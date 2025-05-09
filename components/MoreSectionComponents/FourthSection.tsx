@@ -1,5 +1,4 @@
 /* eslint-disable import/no-unresolved */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { DarkColors } from "@/constants/Colors";
 import { useLogout } from "@/lib/auth";
@@ -29,7 +28,7 @@ export default function FourthSection() {
 					navigation.dispatch(
 						CommonActions.reset({
 							index: 0,
-							routes: [{ name: "LoginScreen" }], // Replace the entire stack with the Login screen
+							routes: [{ name: "LogInScreen" }], // Replace the entire stack with the Login screen
 						})
 					);
 				},
