@@ -16,6 +16,17 @@ import {
 	View,
 } from "react-native";
 
+const getDateString = (date: Date) => {
+	const options: Intl.DateTimeFormatOptions = {
+		day: "numeric",
+		month: "long",
+		year: "numeric",
+		// hour: "2-digit",
+		// minute: "2-digit",
+	};
+	return date.toLocaleDateString("en-GB", options);
+};
+
 export default function HomeScreen() {
 	const [journals, setJournals] = useState<Journal[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -69,7 +80,7 @@ export default function HomeScreen() {
 				>
 					<View style={styles.cardToday}>
 						<Text style={styles.cardTitle}>Today</Text>
-						<Text style={styles.cardSubtitle}>30 April 2025</Text>
+						<Text style={styles.cardSubtitle}>{getDateString(new Date())}</Text>
 					</View>
 
 					{/* <View style={styles.cardMuted}>

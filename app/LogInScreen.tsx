@@ -11,6 +11,7 @@ import {
 	Platform,
 	ScrollView,
 	StyleSheet,
+	Switch,
 	Text,
 	TextInput,
 	TouchableOpacity,
@@ -26,6 +27,7 @@ export default function LogInScreen() {
 	const [errorMessage, setErrorMessage] = useState("");
 	const { login, error } = useLogin();
 	const [confirmationMessage, setConfirmationMessage] = useState("");
+	const [showPassword, setShowPassword] = useState(false);
 
 	const [errors, setErrors] = useState({
 		UsernameOrEmail: "",
@@ -93,12 +95,27 @@ export default function LogInScreen() {
 					{/* Password */}
 					<TextInput
 						placeholder="Password"
-						secureTextEntry
+						secureTextEntry={!showPassword}
 						style={styles.input}
 						value={password}
 						onChangeText={setPassword}
 						placeholderTextColor={Colors.accent}
 					/>
+					<TouchableOpacity
+						style={styles.showPasswordContainer}
+						activeOpacity={0.8}
+						onPress={() => setShowPassword(!showPassword)}
+					>
+						<Switch
+							value={showPassword}
+							onValueChange={(value) => setShowPassword(value)}
+							trackColor={{ false: "#ccc", true: Colors.accent }}
+							thumbColor={showPassword ? "#fff" : "#fff"}
+						/>
+						<Text style={styles.showPasswordText}>
+							{showPassword ? "Hide Password" : "Show Password"}
+						</Text>
+					</TouchableOpacity>
 
 					{/* Signup Button */}
 					<TouchableOpacity style={styles.signupButton} onPress={handleLogin}>
@@ -155,21 +172,18 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		fontFamily: "ComicNeue-Regular",
 	},
-	confirmPasswordContainer: {
-		width: "100%",
+	showPasswordContainer: {
 		flexDirection: "row",
 		alignItems: "center",
-		backgroundColor: "white",
-		borderRadius: 10,
 		marginBottom: 15,
-		paddingHorizontal: 15,
 	},
-	confirmInput: {
-		flex: 1,
-		height: 50,
+	showPasswordText: {
+		marginLeft: 10,
 		fontSize: 16,
+		color: Colors.accent,
 		fontFamily: "ComicNeue-Regular",
 	},
+
 	checkIcon: {
 		marginLeft: 10,
 	},
