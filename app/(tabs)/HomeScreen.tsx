@@ -4,7 +4,7 @@ import JournalCard from "@/components/HomeScreenComponents/JournalCard";
 import { DarkColors } from "@/constants/Colors";
 import { getJournals, Journal } from "@/lib/apiGetActions";
 import { Ionicons } from "@expo/vector-icons";
-import { Plus } from "lucide-react-native";
+import { ListFilter, Plus } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
 	ActivityIndicator,
@@ -88,9 +88,14 @@ export default function HomeScreen() {
 						<Text style={styles.cardSubtitle}>No throwback</Text>
 					</View> */}
 				</ScrollView>
+				<View style={{ flex: 1, flexDirection: "row" }}>
+					<Text>Journals</Text>
+					<TouchableOpacity>
+						<ListFilter />
+					</TouchableOpacity>
+				</View>
 
 				{/* Empty State */}
-
 				{/* Cards or Empty */}
 				{loading ? (
 					<ActivityIndicator size="large" color={DarkColors.accent} />
