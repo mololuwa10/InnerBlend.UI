@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
 	journalFilter: {
 		color: DarkColors.textPrimary,
 		fontFamily: "ComicNeue-Regular",
-		fontSize: 15,
+		fontSize: 18,
 	},
 	emptyState: {
 		alignItems: "center",
