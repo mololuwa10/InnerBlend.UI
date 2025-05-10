@@ -88,10 +88,10 @@ export default function HomeScreen() {
 						<Text style={styles.cardSubtitle}>No throwback</Text>
 					</View> */}
 				</ScrollView>
-				<View style={{ flex: 1, flexDirection: "row" }}>
-					<Text>Journals</Text>
+				<View style={styles.journalFilterContainer}>
+					<Text style={styles.journalFilter}>Journals</Text>
 					<TouchableOpacity>
-						<ListFilter />
+						<ListFilter size={28} color={DarkColors.textPrimary} />
 					</TouchableOpacity>
 				</View>
 
@@ -195,6 +195,17 @@ const styles = StyleSheet.create({
 	},
 	cardSubtitle: {
 		color: DarkColors.accent,
+		fontFamily: "ComicNeue-Regular",
+		fontSize: 15,
+	},
+	journalFilterContainer: {
+		flex: 1,
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+	},
+	journalFilter: {
+		color: DarkColors.textPrimary,
 		fontFamily: "ComicNeue-Regular",
 		fontSize: 15,
 	},

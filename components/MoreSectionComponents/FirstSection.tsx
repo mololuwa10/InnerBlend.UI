@@ -70,13 +70,20 @@ export default function FirstSection() {
 							borderRadius: 25,
 							borderWidth: 3,
 							borderColor: DarkColors.textPrimary,
+							fontFamily: "ComicNeue-Regular",
 							lineHeight: 40,
 						}}
 					>
 						{userDetails?.firstName.charAt(0)}
 					</Text>
 
-					<Text style={{ color: DarkColors.textPrimary, fontSize: 16 }}>
+					<Text
+						style={{
+							color: DarkColors.textPrimary,
+							fontSize: 18,
+							fontFamily: "ComicNeue-Bold",
+						}}
+					>
 						{userDetails?.firstName} {userDetails?.lastName}
 					</Text>
 				</TouchableOpacity>
@@ -105,7 +112,13 @@ export default function FirstSection() {
 						}}
 					/>
 
-					<Text style={{ color: DarkColors.textPrimary, fontSize: 16 }}>
+					<Text
+						style={{
+							color: DarkColors.textPrimary,
+							fontSize: 18,
+							fontFamily: "ComicNeue-Bold",
+						}}
+					>
 						Notifications
 					</Text>
 				</TouchableOpacity>
@@ -134,7 +147,13 @@ export default function FirstSection() {
 						}}
 					/>
 
-					<Text style={{ color: DarkColors.textPrimary, fontSize: 16 }}>
+					<Text
+						style={{
+							color: DarkColors.textPrimary,
+							fontSize: 18,
+							fontFamily: "ComicNeue-Bold",
+						}}
+					>
 						My Journals
 					</Text>
 				</TouchableOpacity>

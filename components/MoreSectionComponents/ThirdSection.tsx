@@ -1,5 +1,4 @@
 /* eslint-disable import/no-unresolved */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
@@ -45,7 +44,13 @@ export default function ThirdSection() {
 						}}
 					/>
 
-					<Text style={{ color: DarkColors.textPrimary, fontSize: 16 }}>
+					<Text
+						style={{
+							color: DarkColors.textPrimary,
+							fontSize: 18,
+							fontFamily: "ComicNeue-Bold",
+						}}
+					>
 						Account Settings
 					</Text>
 				</TouchableOpacity>
@@ -74,7 +79,13 @@ export default function ThirdSection() {
 						}}
 					/>
 
-					<Text style={{ color: DarkColors.textPrimary, fontSize: 16 }}>
+					<Text
+						style={{
+							color: DarkColors.textPrimary,
+							fontSize: 18,
+							fontFamily: "ComicNeue-Bold",
+						}}
+					>
 						App theme
 					</Text>
 				</TouchableOpacity>
@@ -103,7 +114,13 @@ export default function ThirdSection() {
 						}}
 					/>
 
-					<Text style={{ color: DarkColors.textPrimary, fontSize: 16 }}>
+					<Text
+						style={{
+							color: DarkColors.textPrimary,
+							fontSize: 18,
+							fontFamily: "ComicNeue-Bold",
+						}}
+					>
 						Backup/Sync
 					</Text>
 				</TouchableOpacity>

@@ -30,7 +30,8 @@ export default function Index() {
 				if (isNew !== null && isNew !== "true") {
 					const token = await AsyncStorage.getItem("token");
 					if (!token) {
-						router.replace("/");
+						// router.replace("/");
+						navigation.navigate("index");
 						return;
 					}
 

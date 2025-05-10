@@ -62,8 +62,13 @@ export default function FourthSection() {
 							width: 50,
 						}}
 					/>
-
-					<Text style={{ color: DarkColors.textPrimary, fontSize: 16 }}>
+					<Text
+						style={{
+							color: DarkColors.textPrimary,
+							fontSize: 18,
+							fontFamily: "ComicNeue-Bold",
+						}}
+					>
 						Share Inner Blend
 					</Text>
 				</TouchableOpacity>
@@ -94,7 +99,13 @@ export default function FourthSection() {
 						}}
 					/>
 
-					<Text style={{ color: DarkColors.textPrimary, fontSize: 16 }}>
+					<Text
+						style={{
+							color: DarkColors.textPrimary,
+							fontSize: 18,
+							fontFamily: "ComicNeue-Bold",
+						}}
+					>
 						About Inner Blend
 					</Text>
 				</TouchableOpacity>
@@ -123,7 +134,13 @@ export default function FourthSection() {
 						}}
 					/>
 
-					<Text style={{ color: DarkColors.textPrimary, fontSize: 16 }}>
+					<Text
+						style={{
+							color: DarkColors.textPrimary,
+							fontSize: 18,
+							fontFamily: "ComicNeue-Bold",
+						}}
+					>
 						Help
 					</Text>
 				</TouchableOpacity>
@@ -152,7 +169,7 @@ export default function FourthSection() {
 						}}
 					/>
 
-					<Text style={{ color: DarkColors.textPrimary, fontSize: 16 }}>Language</Text>
+					<Text style={{ color: DarkColors.textPrimary, fontSize: 18 }}>Language</Text>
 				</TouchableOpacity> */}
 
 				<TouchableOpacity
@@ -177,7 +194,13 @@ export default function FourthSection() {
 						}}
 					/>
 
-					<Text style={{ color: DarkColors.textPrimary, fontSize: 16 }}>
+					<Text
+						style={{
+							color: DarkColors.textPrimary,
+							fontSize: 18,
+							fontFamily: "ComicNeue-Bold",
+						}}
+					>
 						Sign Out
 					</Text>
 				</TouchableOpacity>
@@ -206,7 +229,13 @@ export default function FourthSection() {
 						}}
 					/>
 
-					<Text style={{ color: DarkColors.textPrimary, fontSize: 16 }}>
+					<Text
+						style={{
+							color: DarkColors.textPrimary,
+							fontSize: 18,
+							fontFamily: "ComicNeue-Bold",
+						}}
+					>
 						Delete Account
 					</Text>
 				</TouchableOpacity>
