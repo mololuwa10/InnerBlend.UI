@@ -59,17 +59,14 @@ export const updateUserProfile = async (editUserModel: EditUserModel) => {
 	}
 
 	try {
-		const response = await fetch(
-			`http://${ip}:5133/api/UserAccount/edit-user`,
-			{
-				method: "PUT",
-				headers: {
-					Authorization: `Bearer ${token}`,
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(editUserModel),
-			}
-		);
+		const response = await fetch(`http://${ip}:5183/api/UserAccount/edit`, {
+			method: "PUT",
+			headers: {
+				Authorization: `Bearer ${token}`,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(editUserModel),
+		});
 
 		if (response.ok) {
 			const data = await response.json();

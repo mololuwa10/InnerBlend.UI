@@ -16,16 +16,13 @@ export const deleteUser = async () => {
 	}
 
 	try {
-		const response = await fetch(
-			`http://${ip}:5133/api/UserAccount/delete-user`,
-			{
-				method: "DELETE",
-				headers: {
-					Authorization: `Bearer ${token}`,
-					"Content-Type": "application/json",
-				},
-			}
-		);
+		const response = await fetch(`http://${ip}:5183/api/UserAccount/delete`, {
+			method: "DELETE",
+			headers: {
+				Authorization: `Bearer ${token}`,
+				"Content-Type": "application/json",
+			},
+		});
 
 		if (response.ok) {
 			Toast.show({
