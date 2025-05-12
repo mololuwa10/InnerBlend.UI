@@ -33,8 +33,6 @@ export default function CalendarViewScreen() {
 	return (
 		<>
 			<View style={styles.container}>
-				{/* {showSearch&& (
-)} */}
 				<View style={styles.header}>
 					<Text style={styles.appName}>InnerBlend</Text>
 

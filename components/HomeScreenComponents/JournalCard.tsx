@@ -2,6 +2,7 @@
 "use client";
 
 import { DarkColors } from "@/constants/Colors";
+import { router } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -10,9 +11,6 @@ const getDateString = (date: Date) => {
 		day: "numeric",
 		month: "long",
 		year: "numeric",
-		// weekday: "short",
-		// hour: "2-digit",
-		// minute: "2-digit",
 	};
 	return date.toLocaleDateString("en-GB", options);
 };
@@ -28,7 +26,18 @@ export default function JournalCard({ journal }: { journal: any }) {
 					weekday: "short",
 				})}
 			</Text>
-			<TouchableOpacity style={styles.card}>
+			<TouchableOpacity
+				style={styles.card}
+				onPress={() =>
+					router.push({
+						pathname: "/JournalView",
+						params: {
+							journalTitle: journal.journalTitle,
+							entries: JSON.stringify(entries),
+						},
+					})
+				}
+			>
 				<Text style={styles.title}>{journal.journalTitle}</Text>
 
 				{entries.length === 0 ? (
