@@ -1,4 +1,5 @@
 /* eslint-disable import/no-unresolved */
+import { DarkColors } from "@/constants/Colors";
 import { updateUserProfile } from "@/lib/apiPutActions";
 import { fetchUserDetails, UserDetails } from "@/lib/auth";
 import { useNavigation } from "@react-navigation/native";
@@ -10,6 +11,7 @@ import {
 	Image,
 	Platform,
 	ScrollView,
+	StyleSheet,
 	Text,
 	TextInput,
 	TouchableOpacity,
@@ -18,35 +20,17 @@ import {
 import Toast from "react-native-toast-message";
 
 const LabeledInput = ({ label, value, onChange, fieldType, ...props }: any) => (
-	<View style={{ flexDirection: "column", marginBottom: 6 }}>
-		<Text
-			style={{
-				fontSize: 16,
-				color: "white",
-				fontWeight: "semibold",
-				marginBottom: 6,
-			}}
-		>
-			{label}
-		</Text>
-		<View
-			style={{
-				height: 44,
-				width: "100%",
-				borderColor: "#3f3f3f",
-				borderWidth: 1,
-				borderRadius: 4,
-				marginVertical: 6,
-				justifyContent: "center",
-				paddingLeft: 8,
-			}}
-		>
+	<View style={styles.inputGroup}>
+		<Text style={styles.label}>{label}</Text>
+		<View style={styles.inputWrapper}>
 			<TextInput
 				value={value}
 				onChangeText={onChange}
 				autoComplete={fieldType}
 				style={{
 					color: "white",
+					fontFamily: "ComicNeue-Regular",
+					fontSize: 15,
 				}}
 				{...props}
 			/>
@@ -155,83 +139,33 @@ export default function PersonalInfo() {
 
 	return (
 		<>
-			<View style={{ flex: 1, backgroundColor: "#1c1c1c" }}>
-				<View
-					style={{
-						flexDirection: "row",
-						alignItems: "center",
-						paddingVertical: 20,
-						paddingHorizontal: 20,
-						paddingTop: Platform.OS === "ios" ? 50 : 20,
-						// backgroundColor: "#FAF9F6",
-						zIndex: 10,
-					}}
-				>
+			<View style={styles.container}>
+				<View style={styles.headerContainer}>
 					<TouchableOpacity onPress={() => navigation.goBack()}>
 						<ArrowLeft size={22} color="white" />
 					</TouchableOpacity>
 
 					<View style={{ flex: 1, alignItems: "center" }}>
-						<Text
-							style={{
-								fontSize: 18,
-								fontWeight: "bold",
-								color: "white",
-								textAlign: "center",
-							}}
-						>
-							Edit Profile
-						</Text>
+						<Text style={styles.headerText}>Edit Profile</Text>
 					</View>
 
 					<TouchableOpacity
 						onPress={() => handleUpdateProfile()}
-						style={{
-							borderRadius: 50,
-							backgroundColor: "#3f3f3f",
-						}}
+						style={styles.saveButton}
 					>
-						<Text
-							style={{
-								color: "white",
-								paddingHorizontal: 25,
-								paddingVertical: 15,
-							}}
-						>
-							Save
-						</Text>
+						<Text style={styles.saveButtonText}>Save</Text>
 					</TouchableOpacity>
 				</View>
 
-				<ScrollView style={{ paddingHorizontal: 20, marginBottom: 15 }}>
-					<View
-						style={{
-							alignItems: "center",
-							marginVertical: 22,
-						}}
-					>
+				<ScrollView style={styles.scrollContainer}>
+					<View style={styles.imageContainer}>
 						<TouchableOpacity onPress={handleImageSelection}>
 							<Image
 								source={{ uri: selectedImage || "https://picsum.photos/200" }}
-								style={{
-									height: 170,
-									width: 170,
-									borderRadius: 85,
-									borderWidth: 5,
-									borderColor: "#3f3f3f",
-								}}
+								style={styles.profileImage}
 							/>
 
-							<View
-								style={{
-									position: "absolute",
-									bottom: 0,
-									right: 10,
-									zIndex: 9999,
-									backgroundColor: "#3f3f3f",
-									borderRadius: 20,
-								}}
-							>
+							<View style={styles.cameraIconWrapper}>
 								<Camera
 									size={32}
 									color={"#ffff"}
@@ -288,73 +222,29 @@ export default function PersonalInfo() {
 						/>
 
 						{/* Password */}
-						<View style={{ flexDirection: "column", marginBottom: 6 }}>
-							<Text
-								style={{
-									fontSize: 16,
-									color: "white",
-									fontWeight: "semibold",
-									marginBottom: 6,
-								}}
-							>
-								Password
-							</Text>
-							<View
-								style={{
-									height: 44,
-									width: "100%",
-									borderColor: "#3f3f3f",
-									borderWidth: 1,
-									borderRadius: 4,
-									marginVertical: 6,
-									justifyContent: "center",
-									paddingLeft: 8,
-								}}
-							>
+						<View style={styles.inputGroup}>
+							<Text style={styles.label}>Password</Text>
+							<View style={styles.inputWrapper}>
 								<TextInput
 									value={password}
 									onChangeText={(value) => setPassword(value)}
 									editable={true}
 									secureTextEntry={true}
-									style={{
-										color: "white",
-									}}
+									style={styles.textInput}
 								/>
 							</View>
 						</View>
 
 						{/* Confirm Password */}
-						<View style={{ flexDirection: "column", marginBottom: 6 }}>
-							<Text
-								style={{
-									fontSize: 16,
-									color: "white",
-									fontWeight: "semibold",
-									marginBottom: 6,
-								}}
-							>
-								Confirm Password
-							</Text>
-							<View
-								style={{
-									height: 44,
-									width: "100%",
-									borderColor: "#3f3f3f",
-									borderWidth: 1,
-									borderRadius: 4,
-									marginVertical: 6,
-									justifyContent: "center",
-									paddingLeft: 8,
-								}}
-							>
+						<View style={styles.inputGroup}>
+							<Text style={styles.label}>Confirm Password</Text>
+							<View style={styles.inputWrapper}>
 								<TextInput
 									value={confirmPassword}
 									onChangeText={(value) => setConfirmPassword(value)}
 									editable={true}
 									secureTextEntry={true}
-									style={{
-										color: "white",
-									}}
+									style={styles.textInput}
 								/>
 							</View>
 						</View>
@@ -364,3 +254,79 @@ export default function PersonalInfo() {
 		</>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: DarkColors.background,
+	},
+	headerContainer: {
+		flexDirection: "row",
+		alignItems: "center",
+		paddingVertical: 10,
+		paddingHorizontal: 20,
+		paddingTop: Platform.OS === "ios" ? 50 : 10,
+	},
+	headerText: {
+		fontSize: 20,
+		fontFamily: "ComicNeue-Bold",
+		color: "white",
+		textAlign: "center",
+	},
+	saveButton: {
+		borderRadius: 50,
+		backgroundColor: DarkColors.buttonColor,
+	},
+	saveButtonText: {
+		color: "white",
+		paddingHorizontal: 25,
+		paddingVertical: 15,
+		fontFamily: "ComicNeue-Bold",
+	},
+	scrollContainer: {
+		paddingHorizontal: 20,
+		marginBottom: 10,
+	},
+	imageContainer: {
+		alignItems: "center",
+		marginVertical: 22,
+	},
+	profileImage: {
+		height: 170,
+		width: 170,
+		borderRadius: 85,
+		borderWidth: 5,
+		borderColor: "#3f3f3f",
+	},
+	cameraIconWrapper: {
+		position: "absolute",
+		bottom: 0,
+		right: 10,
+		zIndex: 9999,
+		backgroundColor: "#3f3f3f",
+		borderRadius: 20,
+	},
+	inputGroup: {
+		flexDirection: "column",
+		marginBottom: 6,
+	},
+	label: {
+		fontSize: 17,
+		color: "white",
+		fontFamily: "ComicNeue-Bold",
+		marginBottom: 6,
+	},
+	inputWrapper: {
+		height: 44,
+		width: "100%",
+		borderColor: DarkColors.accent,
+		borderWidth: 1,
+		borderRadius: 4,
+		marginVertical: 6,
+		justifyContent: "center",
+		paddingLeft: 8,
+	},
+	textInput: {
+		color: "white",
+	},
+});

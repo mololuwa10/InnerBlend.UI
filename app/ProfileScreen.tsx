@@ -150,7 +150,7 @@ export default function ProfileScreen() {
 								style={styles.sectionRow}
 								onPress={() => navigation.navigate("TaskList")}
 							>
-								<Text style={styles.textWhite}>All Tasks</Text>
+								<Text style={styles.textWhite}>All Journals</Text>
 								<ArrowRight color={"#fff"} />
 							</TouchableOpacity>
 						</View>
@@ -223,8 +223,8 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	headerTitle: {
-		fontSize: 18,
-		fontWeight: "bold",
+		fontSize: 23,
+		fontFamily: "ComicNeue-Bold",
 		color: "white",
 		textAlign: "center",
 	},
@@ -239,18 +239,19 @@ const styles = StyleSheet.create({
 		marginVertical: 20,
 	},
 	userName: {
-		fontSize: 24,
-		fontWeight: "bold",
+		fontSize: 26,
+		fontFamily: "ComicNeue-Bold",
 		marginTop: 10,
 		color: "#fff",
 	},
 	userEmail: {
 		color: "#fff",
 		marginBottom: 20,
+		fontFamily: "ComicNeue-Regular",
 	},
 	sectionHeader: {
-		fontSize: 18,
-		fontWeight: "700",
+		fontSize: 20,
+		fontFamily: "ComicNeue-Bold",
 		marginBottom: 10,
 		color: "#fff",
 	},
@@ -278,5 +279,7 @@ const styles = StyleSheet.create({
 	},
 	textWhite: {
 		color: "#fff",
+		fontFamily: "ComicNeue-Regular",
+		fontSize: 15,
 	},
 });
