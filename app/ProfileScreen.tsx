@@ -16,6 +16,7 @@ import {
 	Alert,
 	Platform,
 	ScrollView,
+	StyleSheet,
 	Switch,
 	Text,
 	TouchableOpacity,
@@ -100,131 +101,56 @@ export default function ProfileScreen() {
 
 	return (
 		<>
-			<View style={{ flex: 1, backgroundColor: "#1c1c1c" }}>
-				<View
-					style={{
-						flexDirection: "row",
-						alignItems: "center",
-						paddingVertical: 20,
-						paddingHorizontal: 20,
-						paddingTop: Platform.OS === "ios" ? 50 : 20,
-						// backgroundColor: "#FAF9F6",
-						zIndex: 10,
-					}}
-				>
+			<View style={styles.container}>
+				<View style={styles.header}>
 					<TouchableOpacity onPress={() => navigation.goBack()}>
 						<ArrowLeft size={22} color="white" />
 					</TouchableOpacity>
-					<View style={{ flex: 1, alignItems: "center" }}>
-						<Text
-							style={{
-								fontSize: 18,
-								fontWeight: "bold",
-								color: "white",
-								textAlign: "center",
-							}}
-						>
-							Profile
-						</Text>
+					<View style={styles.headerTitleWrapper}>
+						<Text style={styles.headerTitle}>Profile</Text>
 					</View>
 				</View>
 
-				<ScrollView
-					contentContainerStyle={{
-						flexGrow: 1,
-						// justifyContent: "center",
-						// alignItems: "center",
-						padding: 20,
-						paddingTop: 0,
-						paddingBottom: 100,
-						// backgroundColor: "#FAF9F6",
-					}}
-				>
+				<ScrollView contentContainerStyle={styles.scrollContent}>
 					{/* User Info Section */}
-					<View style={{ alignItems: "center", marginVertical: 20 }}>
-						{/* <Icon name="user-circle" size={100} color="#fff" /> */}
+					<View style={styles.userInfoContainer}>
 						<Ionicons
 							name="person-circle"
 							size={100}
 							color={DarkColors.highlight}
 						/>
-						<Text
-							style={{
-								fontSize: 24,
-								fontWeight: "bold",
-								marginTop: 10,
-								color: "#fff",
-							}}
-						>
+						<Text style={styles.userName}>
 							{userDetails?.firstName} {userDetails?.lastName}
 						</Text>
-						<Text style={{ color: "#fff", marginBottom: 20 }}>
+						<Text style={styles.userEmail}>
 							{userDetails ? userDetails.email : ""}
 						</Text>
 					</View>
 
 					{/* General Settings */}
 					<View>
-						<Text
-							style={{
-								fontSize: 18,
-								fontWeight: "700",
-								marginBottom: 10,
-								color: "#fff",
-							}}
-						>
-							General
-						</Text>
-						<View
-							style={{
-								backgroundColor: "#303030",
-								padding: 15,
-								borderRadius: 10,
-								marginBottom: 10,
-								elevation: 2,
-							}}
-						>
+						<Text style={styles.sectionHeader}>General</Text>
+						<View style={styles.sectionContainer}>
 							<TouchableOpacity
-								style={{
-									flexDirection: "row",
-									justifyContent: "space-between",
-									alignItems: "center",
-									paddingBottom: 10,
-									borderBottomWidth: 0.5,
-								}}
+								style={styles.sectionRow}
 								onPress={() => navigation.navigate("PersonalInfo")}
 							>
-								<Text style={{ color: "#fff" }}>Personal Info</Text>
+								<Text style={styles.textWhite}>Personal Info</Text>
 								<ArrowRight color={"#fff"} />
 							</TouchableOpacity>
 
-							<TouchableOpacity
-								style={{
-									flexDirection: "row",
-									justifyContent: "space-between",
-									alignItems: "center",
-									paddingBottom: 10,
-									borderBottomWidth: 0.5,
-								}}
-							>
-								<Text style={{ color: "#fff" }}>Dark Mode</Text>
+							<TouchableOpacity style={styles.sectionRow}>
+								<Text style={styles.textWhite}>Dark Mode</Text>
 								<Switch
 									value={isDarkMode}
 									onValueChange={() => setIsDarkMode(!isDarkMode)}
 								/>
 							</TouchableOpacity>
 							<TouchableOpacity
-								style={{
-									flexDirection: "row",
-									justifyContent: "space-between",
-									alignItems: "center",
-									paddingTop: 10,
-									paddingBottom: 10,
-									borderBottomWidth: 0.5,
-								}}
+								style={styles.sectionRow}
 								onPress={() => navigation.navigate("TaskList")}
 							>
-								<Text style={{ color: "#fff" }}>All Tasks</Text>
+								<Text style={styles.textWhite}>All Tasks</Text>
 								<ArrowRight color={"#fff"} />
 							</TouchableOpacity>
 						</View>
@@ -232,49 +158,23 @@ export default function ProfileScreen() {
 
 					{/* Support Section */}
 					<View style={{ marginTop: 10 }}>
-						<Text
-							style={{
-								fontSize: 18,
-								fontWeight: "700",
-								color: "#fff",
-								marginBottom: 10,
-							}}
-						>
-							Support
-						</Text>
+						<Text style={styles.sectionHeader}>Support</Text>
 						<View
 							style={{
-								backgroundColor: "#303030",
+								backgroundColor: DarkColors.buttonColor,
 								padding: 15,
 								borderRadius: 10,
 								marginBottom: 10,
 								elevation: 2,
 							}}
 						>
-							<TouchableOpacity
-								style={{
-									flexDirection: "row",
-									justifyContent: "space-between",
-									alignItems: "center",
-									paddingBottom: 10,
-									borderBottomWidth: 0.5,
-								}}
-							>
-								<Text style={{ color: "#fff" }}>Help Center</Text>
+							<TouchableOpacity style={styles.sectionRow}>
+								<Text style={styles.textWhite}>Help Center</Text>
 								<ArrowRight color={"#fff"} />
 							</TouchableOpacity>
 
-							<TouchableOpacity
-								style={{
-									flexDirection: "row",
-									justifyContent: "space-between",
-									alignItems: "center",
-									paddingTop: 10,
-									paddingBottom: 10,
-									borderBottomWidth: 0.5,
-								}}
-							>
-								<Text style={{ color: "#fff" }}>Contact Us</Text>
+							<TouchableOpacity style={styles.sectionRow}>
+								<Text style={styles.textWhite}>Contact Us</Text>
 								<ArrowRight color={"#fff"} />
 							</TouchableOpacity>
 						</View>
@@ -282,51 +182,21 @@ export default function ProfileScreen() {
 
 					{/* General Settings */}
 					<View style={{ marginTop: 10 }}>
-						<Text
-							style={{
-								fontSize: 18,
-								fontWeight: "700",
-								color: "#fff",
-								marginBottom: 10,
-							}}
-						>
-							Account
-						</Text>
-						<View
-							style={{
-								backgroundColor: "#303030",
-								padding: 15,
-								borderRadius: 10,
-								marginBottom: 10,
-								elevation: 2,
-							}}
-						>
+						<Text style={styles.sectionHeader}>Account</Text>
+						<View style={styles.sectionContainer}>
 							<TouchableOpacity
-								style={{
-									flexDirection: "row",
-									justifyContent: "space-between",
-									alignItems: "center",
-									paddingBottom: 10,
-									borderBottomWidth: 0.5,
-								}}
+								style={styles.sectionRow}
 								onPress={handleLogout}
 							>
-								<Text style={{ color: "white" }}>Logout</Text>
+								<Text style={styles.textWhite}>Logout</Text>
 								<LogOut color={"white"} size={20} />
 							</TouchableOpacity>
 
 							<TouchableOpacity
-								style={{
-									flexDirection: "row",
-									justifyContent: "space-between",
-									alignItems: "center",
-									paddingTop: 10,
-									paddingBottom: 10,
-									// borderBottomWidth: 0.5,
-								}}
+								style={styles.sectionRow}
 								onPress={handleDeleteAccount}
 							>
-								<Text style={{ color: "white" }}>Delete Account</Text>
+								<Text style={styles.textWhite}>Delete Account</Text>
 								<Trash2 color={"white"} size={20} />
 							</TouchableOpacity>
 						</View>
@@ -337,4 +207,76 @@ export default function ProfileScreen() {
 	);
 }
 
-// export default ProfileScreen;
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: DarkColors.background,
+	},
+	header: {
+		flexDirection: "row",
+		alignItems: "center",
+		paddingHorizontal: 20,
+		paddingTop: Platform.OS === "ios" ? 50 : 10,
+	},
+	headerTitleWrapper: {
+		flex: 1,
+		alignItems: "center",
+	},
+	headerTitle: {
+		fontSize: 18,
+		fontWeight: "bold",
+		color: "white",
+		textAlign: "center",
+	},
+	scrollContent: {
+		flexGrow: 1,
+		padding: 20,
+		paddingTop: 0,
+		paddingBottom: 20,
+	},
+	userInfoContainer: {
+		alignItems: "center",
+		marginVertical: 20,
+	},
+	userName: {
+		fontSize: 24,
+		fontWeight: "bold",
+		marginTop: 10,
+		color: "#fff",
+	},
+	userEmail: {
+		color: "#fff",
+		marginBottom: 20,
+	},
+	sectionHeader: {
+		fontSize: 18,
+		fontWeight: "700",
+		marginBottom: 10,
+		color: "#fff",
+	},
+	sectionContainer: {
+		backgroundColor: DarkColors.buttonColor,
+		padding: 15,
+		borderRadius: 10,
+		marginBottom: 10,
+		elevation: 2,
+	},
+	sectionRow: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		paddingBottom: 10,
+		borderBottomWidth: 0.5,
+		borderBottomColor: "#444", // Optional
+	},
+	sectionRowNoBorder: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		paddingTop: 10,
+		paddingBottom: 10,
+	},
+	textWhite: {
+		color: "#fff",
+	},
+});
