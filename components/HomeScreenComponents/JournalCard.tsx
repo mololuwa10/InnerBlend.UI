@@ -30,7 +30,7 @@ export default function JournalCard({ journal }: { journal: any }) {
 				style={styles.card}
 				onPress={() =>
 					router.push({
-						pathname: "/JournalView",
+						pathname: "/Journal/JournalView",
 						params: {
 							journalTitle: journal.journalTitle,
 							entries: JSON.stringify(entries),

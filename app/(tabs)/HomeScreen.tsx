@@ -88,6 +88,7 @@ export default function HomeScreen() {
 						<Text style={styles.cardSubtitle}>No throwback</Text>
 					</View> */}
 				</ScrollView>
+
 				<View style={styles.journalFilterContainer}>
 					<Text style={styles.journalFilter}>Journals</Text>
 					<TouchableOpacity>

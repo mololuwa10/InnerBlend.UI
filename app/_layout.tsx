@@ -51,6 +51,15 @@ export default function RootLayout() {
 				<Stack.Screen name="PersonalInfo" options={{ headerShown: false }} />
 				<Stack.Screen name="ProfileScreen" options={{ headerShown: false }} />
 				<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+				<Stack.Screen name="Journal" options={{ headerShown: false }} />
+				<Stack.Screen
+					name="Journal/JournalView"
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name="Journal/NewEntryScreen"
+					options={{ headerShown: false }}
+				/>
 			</Stack>
 			<Toast />
 		</>

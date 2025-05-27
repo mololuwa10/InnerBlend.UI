@@ -119,7 +119,7 @@ export default function JournalView() {
 				</ScrollView>
 				{/* New Entry Button */}
 				<TouchableOpacity
-					onPress={() => router.push("/NewEntryScreen")}
+					onPress={() => router.push("/Journal/NewEntryScreen")}
 					style={styles.newEntryButton}
 				>
 					<View style={styles.newEntryWrapper}>
