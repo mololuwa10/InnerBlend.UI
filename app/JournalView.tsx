@@ -7,6 +7,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { Plus } from "lucide-react-native";
 import React, { useState } from "react";
 import {
+	Platform,
 	RefreshControl,
 	ScrollView,
 	StyleSheet,
@@ -117,7 +118,10 @@ export default function JournalView() {
 					)}
 				</ScrollView>
 				{/* New Entry Button */}
-				<TouchableOpacity style={styles.newEntryButton}>
+				<TouchableOpacity
+					onPress={() => router.push("/NewEntryScreen")}
+					style={styles.newEntryButton}
+				>
 					<View style={styles.newEntryWrapper}>
 						<Plus color={DarkColors.textPrimary} size={22} />
 						<Text style={styles.newEntryText}>New Entry</Text>
@@ -132,12 +136,14 @@ const styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
 		backgroundColor: DarkColors.background,
-		paddingVertical: 20,
+		// paddingVertical: 20,
+		paddingTop: Platform.OS === "ios" ? 50 : 45,
+		paddingVertical: 35,
 	},
 	container: {
 		paddingTop: 25,
-		paddingHorizontal: 20,
-		paddingBottom: 100,
+		paddingHorizontal: 15,
+		paddingBottom: 120,
 	},
 	header: {
 		flexDirection: "row",

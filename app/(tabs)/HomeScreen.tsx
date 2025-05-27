@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
 		backgroundColor: DarkColors.background,
 	},
 	container: {
-		paddingTop: 25,
+		paddingTop: 45,
 		paddingHorizontal: 20,
 		paddingBottom: 100,
 	},

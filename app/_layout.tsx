@@ -44,7 +44,7 @@ export default function RootLayout() {
 				<Stack.Screen name="OnboardingTwo" options={{ headerShown: false }} />
 				<Stack.Screen name="OnboardingThree" options={{ headerShown: false }} />
 				<Stack.Screen name="WelcomeScreen" options={{ headerShown: false }} />
-				<Stack.Screen name="OnboardingPager" options={{ headerShown: false }} />
+				{/* <Stack.Screen name="OnboardingPager" options={{ headerShown: false }} /> */}
 				<Stack.Screen name="SignUpScreen" options={{ headerShown: false }} />
 				<Stack.Screen name="LogInScreen" options={{ headerShown: false }} />
 				<Stack.Screen name="JournalView" options={{ headerShown: false }} />

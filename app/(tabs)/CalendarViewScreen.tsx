@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: DarkColors.background,
-		paddingTop: 30,
+		paddingTop: 45,
 	},
 	// calendar: {
 	// 	// height: 370,

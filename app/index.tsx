@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import {
 	ActivityIndicator,
 	Image,
+	Platform,
 	StyleSheet,
 	Text,
 	TouchableOpacity,
@@ -58,7 +59,7 @@ export default function Index() {
 		const timeout = setTimeout(checkAuth, 3000);
 
 		return () => clearTimeout(timeout); // Clean up on unmount
-	}, [router]);
+	}, [navigation, router]);
 
 	if (loading) {
 		return (
@@ -133,7 +134,8 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.background,
 		alignItems: "center",
 		justifyContent: "space-between",
-		paddingVertical: 20,
+		paddingTop: Platform.OS === "ios" ? 50 : 45,
+		paddingVertical: 35,
 		paddingHorizontal: 20,
 	},
 	topRow: {
