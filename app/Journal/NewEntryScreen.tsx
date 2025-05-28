@@ -1,14 +1,14 @@
 /* eslint-disable import/no-unresolved */
+import DateModal from "@/components/JournalViewComponents/DateModal";
+import TagModal from "@/components/JournalViewComponents/TagModal";
+import Toolbar from "@/components/JournalViewComponents/Toolbar";
 import { DarkColors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
 	KeyboardAvoidingView,
-	Modal,
 	Platform,
-	Pressable,
 	StyleSheet,
 	Text,
 	TextInput,
@@ -19,18 +19,17 @@ import {
 export default function NewEntryScreen() {
 	const router = useRouter();
 	const [entry, setEntry] = useState("");
-	const [date] = useState(new Date());
 	const [showTagsModal, setShowTagsModal] = useState(false);
 	const [tags, setTags] = useState<string[]>([]);
 	const [tagInput, setTagInput] = useState("");
 	const [showDateModal, setShowDateModal] = useState(false);
 	const [selectedDate, setSelectedDate] = useState(new Date());
 
-	const formattedDate = date
-		.toLocaleDateString("en-US", {
-			year: "numeric",
-			month: "long",
+	const formattedDate = selectedDate
+		.toLocaleDateString("en-GB", {
 			day: "2-digit",
+			month: "long",
+			year: "numeric",
 		})
 		.toUpperCase();
 
@@ -41,119 +40,21 @@ export default function NewEntryScreen() {
 
 	return (
 		<>
-			<Modal
+			<TagModal
 				visible={showTagsModal}
-				animationType="fade"
-				transparent
-				onRequestClose={() => setShowTagsModal(false)}
-			>
-				<Pressable
-					style={modalStyles.modalOverlay}
-					onPress={() => setShowTagsModal(false)}
-				>
-					<Pressable
-						style={modalStyles.modalCard}
-						onPress={(e) => e.stopPropagation()}
-					>
-						<Text style={modalStyles.modalTitle}>Tags</Text>
+				onClose={() => setShowTagsModal(false)}
+				tags={tags}
+				setTags={setTags}
+				tagInput={tagInput}
+				setTagInput={setTagInput}
+			/>
 
-						<View style={modalStyles.modalInputRow}>
-							<TextInput
-								style={modalStyles.modalInput}
-								placeholder="Enter a tag"
-								placeholderTextColor={DarkColors.accent}
-								value={tagInput}
-								onChangeText={setTagInput}
-							/>
-							<TouchableOpacity
-								onPress={() => {
-									if (tagInput.trim()) {
-										setTags([...tags, tagInput.trim()]);
-										setTagInput("");
-									}
-								}}
-							>
-								<Ionicons name="add" size={22} color={DarkColors.highlight} />
-							</TouchableOpacity>
-						</View>
-
-						<View style={modalStyles.tagList}>
-							{tags.length === 0 ? (
-								<Text style={modalStyles.noTagsText}>No Tags Found</Text>
-							) : (
-								tags.map((tag, idx) => (
-									<Text key={idx} style={modalStyles.tagItem}>
-										• {tag}
-									</Text>
-								))
-							)}
-						</View>
-
-						<View style={modalStyles.modalFooter}>
-							<TouchableOpacity onPress={() => setShowTagsModal(false)}>
-								<Text style={modalStyles.cancel}>Cancel</Text>
-							</TouchableOpacity>
-							<TouchableOpacity onPress={() => setShowTagsModal(false)}>
-								<Text style={modalStyles.ok}>OK</Text>
-							</TouchableOpacity>
-						</View>
-					</Pressable>
-				</Pressable>
-			</Modal>
-
-			<Modal
+			<DateModal
 				visible={showDateModal}
-				animationType="fade"
-				transparent
-				onRequestClose={() => setShowDateModal(false)}
-			>
-				<Pressable
-					style={modalStyles.modalOverlay}
-					onPress={() => setShowDateModal(false)}
-				>
-					<Pressable
-						style={modalStyles.modalCard}
-						onPress={(e) => e.stopPropagation()}
-					>
-						<Text style={modalStyles.modalTitle}>Select Date</Text>
-
-						<View style={{ alignItems: "center", marginVertical: 10 }}>
-							<Text style={modalStyles.dateLabel}>
-								{selectedDate.toLocaleDateString("en-GB", {
-									day: "2-digit",
-									month: "long",
-									year: "numeric",
-								})}
-							</Text>
-						</View>
-
-						<View style={{ alignItems: "center" }}>
-							<DateTimePicker
-								value={selectedDate}
-								mode="date"
-								display="calendar"
-								onChange={(event, date) => {
-									if (event.type === "set" && date) {
-										setSelectedDate(date);
-										setShowDateModal(false);
-									} else if (event.type === "dismissed") {
-										setShowDateModal(false);
-									}
-								}}
-							/>
-						</View>
-
-						<View style={modalStyles.modalFooter}>
-							<TouchableOpacity onPress={() => setShowDateModal(false)}>
-								<Text style={modalStyles.cancel}>Cancel</Text>
-							</TouchableOpacity>
-							<TouchableOpacity onPress={() => setShowDateModal(false)}>
-								<Text style={modalStyles.ok}>OK</Text>
-							</TouchableOpacity>
-						</View>
-					</Pressable>
-				</Pressable>
-			</Modal>
+				date={selectedDate}
+				onConfirm={(date: Date) => setSelectedDate(date)}
+				onClose={() => setShowDateModal(false)}
+			/>
 
 			<KeyboardAvoidingView
 				style={styles.wrapper}
@@ -169,24 +70,10 @@ export default function NewEntryScreen() {
 					</TouchableOpacity>
 
 					<TouchableOpacity
-						style={{
-							flexDirection: "row",
-							alignItems: "center",
-							justifyContent: "center",
-							gap: 4,
-						}}
+						style={styles.dateRow}
 						onPress={() => setShowDateModal(true)}
 					>
-						{/* <Text style={styles.date}>{formattedDate}</Text> */}
-						<Text style={styles.date}>
-							{selectedDate
-								.toLocaleDateString("en-GB", {
-									day: "2-digit",
-									month: "long",
-									year: "numeric",
-								})
-								.toUpperCase()}
-						</Text>
+						<Text style={styles.date}>{formattedDate}</Text>
 						<Ionicons
 							name="chevron-down"
 							size={18}
@@ -207,56 +94,7 @@ export default function NewEntryScreen() {
 					/>
 				</View>
 
-				{/* Bottom Action Bar */}
-				{/* <View style={styles.toolbar}>
-					{["image", "location", "happy", "person", "pricetag"].map(
-						(icon, idx) => (
-							<TouchableOpacity key={idx}>
-								<Ionicons
-									name={`${icon}-outline`}
-									color={DarkColors.highlight}
-									size={24}
-									style={{
-										marginHorizontal: 6,
-										marginBottom: 6,
-										fontWeight: "900",
-									}}
-								/>
-							</TouchableOpacity>
-						)
-					)}
-				</View> */}
-
-				<View style={styles.toolbar}>
-					{["image", "location", "happy", "person"].map((icon, idx) => (
-						<TouchableOpacity key={idx}>
-							<Ionicons
-								name={`${icon}-outline`}
-								color={DarkColors.highlight}
-								size={24}
-								style={{
-									marginHorizontal: 6,
-									marginBottom: 6,
-									fontWeight: "900",
-								}}
-							/>
-						</TouchableOpacity>
-					))}
-
-					{/* Pricetag with modal trigger */}
-					<TouchableOpacity onPress={() => setShowTagsModal(true)}>
-						<Ionicons
-							name="pricetag-outline"
-							color={DarkColors.highlight}
-							size={24}
-							style={{
-								marginHorizontal: 6,
-								marginBottom: 6,
-								fontWeight: "900",
-							}}
-						/>
-					</TouchableOpacity>
-				</View>
+				<Toolbar onTagPress={() => setShowTagsModal(true)} />
 			</KeyboardAvoidingView>
 		</>
 	);
@@ -275,19 +113,16 @@ const styles = StyleSheet.create({
 		paddingTop: Platform.OS === "ios" ? 50 : 40,
 		paddingBottom: 15,
 	},
+	dateRow: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		gap: 4,
+	},
 	date: {
 		color: DarkColors.highlight,
 		fontFamily: "ComicNeue-Bold",
 		fontSize: 16,
-	},
-	placeholder: {
-		color: DarkColors.textPrimary,
-		marginBottom: 15,
-		fontFamily: "ComicNeue-Regular",
-	},
-	template: {
-		color: DarkColors.highlight,
-		fontFamily: "ComicNeue-Bold",
 	},
 	body: {
 		flex: 1,
@@ -300,81 +135,5 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		borderRadius: 10,
 		padding: 16,
-	},
-	toolbar: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		gap: 10,
-		paddingVertical: 20,
-		paddingBottom: 20,
-		backgroundColor: "#1b1b1f",
-		borderTopWidth: 1,
-		borderTopColor: "#2A2A33",
-	},
-});
-
-const modalStyles = StyleSheet.create({
-	modalOverlay: {
-		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: "rgba(0, 0, 0, 0.6)",
-	},
-	modalCard: {
-		width: "85%",
-		backgroundColor: "#2A2A33",
-		padding: 20,
-		borderRadius: 20,
-	},
-	modalTitle: {
-		fontSize: 18,
-		fontFamily: "ComicNeue-Bold",
-		color: DarkColors.textPrimary,
-		marginBottom: 10,
-	},
-	modalInputRow: {
-		flexDirection: "row",
-		alignItems: "center",
-		borderBottomWidth: 1,
-		borderBottomColor: DarkColors.accent,
-		paddingBottom: 6,
-		marginBottom: 12,
-	},
-	modalInput: {
-		flex: 1,
-		color: DarkColors.textPrimary,
-		fontFamily: "ComicNeue-Regular",
-	},
-	tagList: {
-		minHeight: 50,
-		marginBottom: 15,
-	},
-	noTagsText: {
-		color: DarkColors.accent,
-		fontFamily: "ComicNeue-Regular",
-	},
-	tagItem: {
-		color: DarkColors.textPrimary,
-		fontFamily: "ComicNeue-Regular",
-		marginVertical: 2,
-	},
-	modalFooter: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-	},
-	cancel: {
-		color: DarkColors.highlight,
-		fontFamily: "ComicNeue-Bold",
-	},
-	ok: {
-		color: DarkColors.highlight,
-		fontFamily: "ComicNeue-Bold",
-	},
-	dateLabel: {
-		fontSize: 18,
-		fontFamily: "ComicNeue-Bold",
-		color: DarkColors.textPrimary,
-		marginBottom: 10,
 	},
 });
