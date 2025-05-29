@@ -60,6 +60,10 @@ export default function RootLayout() {
 					name="Journal/NewEntryScreen"
 					options={{ headerShown: false }}
 				/>
+				<Stack.Screen
+					name="Journal/LocationPickerScreen"
+					options={{ headerShown: false }}
+				/>
 			</Stack>
 			<Toast />
 		</>
