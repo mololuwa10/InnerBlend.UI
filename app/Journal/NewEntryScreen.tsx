@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
 	KeyboardAvoidingView,
 	Platform,
@@ -26,6 +26,7 @@ export default function NewEntryScreen() {
 	const [selectedDate, setSelectedDate] = useState(new Date());
 	const [showLocationModal, setShowLocationModal] = useState(false);
 	const [location, setLocation] = useState("");
+	const params = useLocalSearchParams();
 
 	const formattedDate = selectedDate
 		.toLocaleDateString("en-GB", {
@@ -39,6 +40,12 @@ export default function NewEntryScreen() {
 		// TODO: Save the entry to the database
 		router.back();
 	};
+
+	useEffect(() => {
+		if (params.location) {
+			setLocation(params.location as string);
+		}
+	}, [params?.location]);
 
 	return (
 		<>

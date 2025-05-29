@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as Location from "expo-location";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
 	Modal,
@@ -25,7 +26,7 @@ export default function LocationModal({
 	currentLocation,
 }: Props) {
 	const [loading, setLoading] = useState(false);
-
+	const router = useRouter();
 	const getLocation = async () => {
 		try {
 			setLoading(true);
@@ -74,7 +75,10 @@ export default function LocationModal({
 								size={24}
 								color={DarkColors.textPrimary}
 							/>
-							<TouchableOpacity disabled={loading}>
+							<TouchableOpacity
+								onPress={() => router.replace("/Journal/LocationPickerScreen")}
+								disabled={loading}
+							>
 								<Text style={styles.option}>Pick a Place</Text>
 							</TouchableOpacity>
 						</View>
