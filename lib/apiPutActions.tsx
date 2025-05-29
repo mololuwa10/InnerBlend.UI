@@ -12,6 +12,19 @@ export interface EditUserModel {
 	PhoneNumber: string;
 }
 
+export interface UpdateJournalInput {
+	journalTitle: string;
+	journalDescription: string;
+}
+
+export interface UpdateJournalEntryInput {
+	title: string;
+	content: string;
+	mood?: "VerySad" | "Sad" | "Neutral" | "Happy" | "VeryHappy";
+	location?: string;
+	tags?: string[];
+}
+
 const ip =
 	Constants.expoConfig?.extra?.apiHost ||
 	Constants.manifest2?.extra?.apiHost ||
@@ -79,6 +92,76 @@ export const updateUserProfile = async (editUserModel: EditUserModel) => {
 		}
 	} catch (error: any) {
 		console.error("Error updating user profile: ", error.message);
+		return null;
+	}
+};
+
+// JOURNAL ======================================================================
+// Update Journal // PUT: api/journal/:journalId
+export const updateJournal = async (
+	journalId: string,
+	update: UpdateJournalInput
+): Promise<boolean | null> => {
+	try {
+		const token = await AsyncStorage.getItem("token");
+		if (!token) throw new Error("No token found");
+
+		const response = await fetch(`http://${ip}:5183/api/journal/${journalId}`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify(update),
+		});
+
+		if (!response.ok) {
+			const errorMsg = await response.text();
+			console.error("Failed to update journal:", errorMsg);
+			return false;
+		}
+
+		const data = await response.json();
+		return data;
+	} catch (error: any) {
+		console.error("There was an error updating journal: ", error);
+		return null;
+	}
+};
+// ===============================================================================
+
+// JOURNAL ENTRY  ================================================================
+// PUT: Update a journal entry by ID
+export const updateJournalEntry = async (
+	entryId: string,
+	update: UpdateJournalEntryInput
+): Promise<boolean | null> => {
+	try {
+		const token = AsyncStorage.getItem("token");
+		if (!token) throw new Error("No token found");
+
+		const response = await fetch(
+			`http://${ip}:5183/api/journalentry/${entryId}`,
+			{
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+				body: JSON.stringify(update),
+			}
+		);
+
+		if (!response.ok) {
+			const errorMsg = await response.text();
+			console.error("Failed to update journal entry:", errorMsg);
+			return false;
+		}
+
+		const data = await response.json();
+		return data;
+	} catch (error: any) {
+		console.error("There was an error updating journal entry: ", error);
 		return null;
 	}
 };
