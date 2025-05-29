@@ -1,5 +1,3 @@
-import DateModal from "@/components/Modals/DateModal";
-import TagModal from "@/components/Modals/TagModal";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -12,6 +10,9 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import DateModal from "../../components/Modals/DateModal";
+import LocationModal from "../../components/Modals/LocationModal";
+import TagModal from "../../components/Modals/TagModal";
 import Toolbar from "../../components/Modals/Toolbar";
 import { DarkColors } from "../../constants/Colors";
 
@@ -23,6 +24,8 @@ export default function NewEntryScreen() {
 	const [tagInput, setTagInput] = useState("");
 	const [showDateModal, setShowDateModal] = useState(false);
 	const [selectedDate, setSelectedDate] = useState(new Date());
+	const [showLocationModal, setShowLocationModal] = useState(false);
+	const [location, setLocation] = useState("");
 
 	const formattedDate = selectedDate
 		.toLocaleDateString("en-GB", {
@@ -53,6 +56,13 @@ export default function NewEntryScreen() {
 				date={selectedDate}
 				onConfirm={(date: Date) => setSelectedDate(date)}
 				onClose={() => setShowDateModal(false)}
+			/>
+
+			<LocationModal
+				visible={showLocationModal}
+				onClose={() => setShowLocationModal(false)}
+				onLocationSet={(loc) => setLocation(loc)}
+				currentLocation={location}
 			/>
 
 			<KeyboardAvoidingView
@@ -93,7 +103,10 @@ export default function NewEntryScreen() {
 					/>
 				</View>
 
-				<Toolbar onTagPress={() => setShowTagsModal(true)} />
+				<Toolbar
+					onTagPress={() => setShowTagsModal(true)}
+					onLocationPress={() => setShowLocationModal(true)}
+				/>
 			</KeyboardAvoidingView>
 		</>
 	);
