@@ -137,3 +137,39 @@ export const getJournalEntryById = async (
 		return null;
 	}
 };
+
+// Get Journal Entries by Journal Id
+export const getJournalEntriesByJournalId = async (
+	journalId: string
+): Promise<JournalEntry | null> => {
+	try {
+		const token = await AsyncStorage.getItem("token");
+		if (!token) throw new Error("No token found");
+
+		const response = await fetch(
+			`http://${ip}:5183/api/journalentry/journal/${journalId}`,
+			{
+				method: "GET",
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-Type": "application/json",
+				},
+			}
+		);
+
+		if (!response.ok) {
+			const errorMsg = await response.text();
+			console.error("Failed to fetch journal entry by journal id:", errorMsg);
+			return null;
+		}
+
+		const data: JournalEntry = await response.json();
+		return data;
+	} catch (error: any) {
+		console.error(
+			"There was an error getting journal entry by journal id: ",
+			error
+		);
+		return null;
+	}
+};
