@@ -6,14 +6,24 @@ import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 export default function Toolbar({ onTagPress }: { onTagPress: () => void }) {
-	const icons = ["image", "location", "happy", "person"];
+	const icons: (
+		| "image-outline"
+		| "location-outline"
+		| "happy-outline"
+		| "person-outline"
+	)[] = [
+		"image-outline",
+		"location-outline",
+		"happy-outline",
+		"person-outline",
+	];
 
 	return (
 		<View style={styles.toolbar}>
 			{icons.map((icon, idx) => (
 				<TouchableOpacity key={idx}>
 					<Ionicons
-						name={`${icon}-outline`}
+						name={icon}
 						color={DarkColors.highlight}
 						size={24}
 						style={styles.icon}

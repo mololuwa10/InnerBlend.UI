@@ -37,7 +37,11 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "expo-font"
+      "expo-font",
+      "expo-location",
+      {
+        "locationAlwaysAndWhenInUsePermission": "Allow InnerBlend to access your location."
+      }
     ],
     "experiments": {
       "typedRoutes": true

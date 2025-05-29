@@ -1,8 +1,5 @@
-/* eslint-disable import/no-unresolved */
-import DateModal from "@/components/JournalViewComponents/DateModal";
-import TagModal from "@/components/JournalViewComponents/TagModal";
-import Toolbar from "@/components/JournalViewComponents/Toolbar";
-import { DarkColors } from "@/constants/Colors";
+import DateModal from "@/components/Modals/DateModal";
+import TagModal from "@/components/Modals/TagModal";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -15,6 +12,8 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import Toolbar from "../../components/Modals/Toolbar";
+import { DarkColors } from "../../constants/Colors";
 
 export default function NewEntryScreen() {
 	const router = useRouter();
