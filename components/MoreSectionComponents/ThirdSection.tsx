@@ -1,12 +1,10 @@
-/* eslint-disable import/no-unresolved */
-
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
-import { DarkColors } from "@/constants/Colors";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { DarkColors } from "../../constants/Colors";
 
 type RootStackParamList = {
 	ProfileScreen: undefined;

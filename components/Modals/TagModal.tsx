@@ -1,6 +1,4 @@
-/* eslint-disable import/no-unresolved */
 // components/TagModal.tsx
-import { DarkColors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import {
@@ -12,6 +10,7 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import { DarkColors } from "../../constants/Colors";
 
 interface TagModalProps {
 	visible: boolean;

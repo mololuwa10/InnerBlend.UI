@@ -1,7 +1,6 @@
-/* eslint-disable import/no-unresolved */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Colors } from "@/constants/Colors";
-import { useLogin } from "@/lib/auth";
+import { Colors } from "../constants/Colors";
+import { useLogin } from "../lib/auth";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { router } from "expo-router";

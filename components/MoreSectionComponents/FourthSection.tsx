@@ -1,22 +1,14 @@
-/* eslint-disable import/no-unresolved */
-
-import { DarkColors } from "@/constants/Colors";
-import { useLogout } from "@/lib/auth";
 import { Ionicons } from "@expo/vector-icons";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
-
-// type RootStackParamList = {
-// 	Login: undefined;
-// };
-
-// type NavigationProp = StackNavigationProp<RootStackParamList, "Login">;
+import { DarkColors } from "../../constants/Colors";
+import { useLogout } from "../../lib/auth";
 
 export default function FourthSection() {
 	const { logout } = useLogout();
-	const navigation = useNavigation<StackNavigationProp<any>>(); // Handle navigation in the component
+	const navigation = useNavigation<StackNavigationProp<any>>();
 
 	const handleLogout = () => {
 		Alert.alert("Logout", "Are you sure you want to logout?", [
@@ -24,11 +16,11 @@ export default function FourthSection() {
 			{
 				text: "Logout",
 				onPress: async () => {
-					await logout(); // Call the logout function and wait for it to finish
+					await logout();
 					navigation.dispatch(
 						CommonActions.reset({
 							index: 0,
-							routes: [{ name: "LogInScreen" }], // Replace the entire stack with the Login screen
+							routes: [{ name: "LogInScreen" }],
 						})
 					);
 				},

@@ -1,14 +1,12 @@
-/* eslint-disable import/no-unresolved */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
-import { DarkColors } from "@/constants/Colors";
-import { fetchUserDetails, UserDetails } from "@/lib/auth";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useFocusEffect } from "expo-router";
 import React, { useCallback, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import { DarkColors } from "../../constants/Colors";
+import { fetchUserDetails, UserDetails } from "../../lib/auth";
 
 type RootStackParamList = {
 	Navigation: undefined;

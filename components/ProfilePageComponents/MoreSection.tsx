@@ -1,6 +1,6 @@
-import { DarkColors } from "@/constants/Colors";
 import React from "react";
 import { ScrollView, Text, View } from "react-native";
+import { DarkColors } from "../../constants/Colors";
 import FirstSection from "../MoreSectionComponents/FirstSection";
 import FourthSection from "../MoreSectionComponents/FourthSection";
 import ThirdSection from "../MoreSectionComponents/ThirdSection";

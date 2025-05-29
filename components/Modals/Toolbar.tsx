@@ -1,9 +1,8 @@
-/* eslint-disable import/no-unresolved */
 // components/Toolbar.tsx
-import { DarkColors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { DarkColors } from "../../constants/Colors";
 
 export default function Toolbar({ onTagPress }: { onTagPress: () => void }) {
 	const icons: (

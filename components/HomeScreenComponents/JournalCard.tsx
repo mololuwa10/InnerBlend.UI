@@ -1,10 +1,9 @@
-/* eslint-disable import/no-unresolved */
 "use client";
 
-import { DarkColors } from "@/constants/Colors";
 import { router } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { DarkColors } from "../../constants/Colors";
 
 const getDateString = (date: Date) => {
 	const options: Intl.DateTimeFormatOptions = {

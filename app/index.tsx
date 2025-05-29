@@ -1,7 +1,3 @@
-/* eslint-disable import/no-unresolved */
-
-import { Colors } from "@/constants/Colors";
-import { fetchUserDetails } from "@/lib/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -17,6 +13,8 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import { Colors } from "../constants/Colors";
+import { fetchUserDetails } from "../lib/auth";
 
 export default function Index() {
 	const navigation = useNavigation<StackNavigationProp<any>>();
@@ -111,7 +109,7 @@ export default function Index() {
 						style={styles.nextButton}
 						onPress={() => navigation.navigate("OnboardingTwo")} // next onboarding screen
 					>
-						<ChevronRight style={styles.nextButtonText} />
+						<ChevronRight color="white" size={24} />
 					</TouchableOpacity>
 				</View>
 				{/* Terms and Privacy */}

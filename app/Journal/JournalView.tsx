@@ -1,7 +1,5 @@
-/* eslint-disable import/namespace */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable import/no-unresolved */
-import { DarkColors } from "@/constants/Colors";
+import { DarkColors } from "../../constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import { Plus } from "lucide-react-native";

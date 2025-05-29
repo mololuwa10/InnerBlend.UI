@@ -1,10 +1,8 @@
-/* eslint-disable import/no-unresolved */
-
-import { Colors } from "@/constants/Colors";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Colors } from "../constants/Colors";
 
 export default function WelcomeScreen() {
 	const navigation = useNavigation<StackNavigationProp<any>>();

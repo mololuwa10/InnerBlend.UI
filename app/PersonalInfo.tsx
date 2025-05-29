@@ -1,7 +1,3 @@
-/* eslint-disable import/no-unresolved */
-import { DarkColors } from "@/constants/Colors";
-import { updateUserProfile } from "@/lib/apiPutActions";
-import { fetchUserDetails, UserDetails } from "@/lib/auth";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as ImagePicker from "expo-image-picker";
@@ -18,6 +14,9 @@ import {
 	View,
 } from "react-native";
 import Toast from "react-native-toast-message";
+import { DarkColors } from "../constants/Colors";
+import { updateUserProfile } from "../lib/apiPutActions";
+import { fetchUserDetails, UserDetails } from "../lib/auth";
 
 const LabeledInput = ({ label, value, onChange, fieldType, ...props }: any) => (
 	<View style={styles.inputGroup}>

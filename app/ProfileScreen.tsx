@@ -1,8 +1,4 @@
-/* eslint-disable import/no-unresolved */
-
-import { DarkColors } from "@/constants/Colors";
-import { deleteUser } from "@/lib/apiDeleteActions";
-import { fetchUserDetails, useLogout, UserDetails } from "@/lib/auth";
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Ionicons } from "@expo/vector-icons";
 import {
 	CommonActions,
@@ -22,6 +18,9 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import { DarkColors } from "../constants/Colors";
+import { deleteUser } from "../lib/apiDeleteActions";
+import { fetchUserDetails, useLogout, UserDetails } from "../lib/auth";
 
 export default function ProfileScreen() {
 	const navigation = useNavigation<StackNavigationProp<any>>();
