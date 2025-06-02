@@ -1,8 +1,3 @@
-/* eslint-disable import/no-unresolved */
-
-import JournalCard from "@/components/HomeScreenComponents/JournalCard";
-import { DarkColors } from "@/constants/Colors";
-import { getJournals, Journal } from "@/lib/apiGetActions";
 import { Ionicons } from "@expo/vector-icons";
 import { ListFilter, Plus } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
@@ -15,6 +10,9 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import JournalCard from "../../components/HomeScreenComponents/JournalCard";
+import { DarkColors } from "../../constants/Colors";
+import { getJournals, Journal } from "../../lib/apiGetActions";
 
 const getDateString = (date: Date) => {
 	const options: Intl.DateTimeFormatOptions = {
