@@ -2,7 +2,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import { Plus } from "lucide-react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Platform,
 	RefreshControl,
@@ -14,6 +14,11 @@ import {
 	View,
 } from "react-native";
 import { DarkColors } from "../../constants/Colors";
+import { moodMap } from "../../constants/moodUtils";
+import {
+	getJournalEntriesByJournalId,
+	JournalEntry,
+} from "../../lib/apiGetActions";
 
 export default function JournalView() {
 	const { journalId, journalTitle, entries } = useLocalSearchParams() as {
@@ -22,8 +27,8 @@ export default function JournalView() {
 		entries: string;
 	};
 
-	const parsedEntries = JSON.parse(entries);
-	const [journalEntries, setJournalEntries] = useState(parsedEntries);
+	// const parsedEntries = JSON.parse(entries);
+	const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([]);
 	const [refreshing, setRefreshing] = useState(false);
 	const [search, setSearch] = useState("");
 
@@ -35,9 +40,21 @@ export default function JournalView() {
 		}, 1000);
 	};
 
-	const filteredEntries = journalEntries.filter((entry: any) =>
-		entry.title.toLowerCase().includes(search.toLowerCase())
-	);
+	useEffect(() => {
+		const fetchEntries = async () => {
+			if (!journalId) return;
+			const result = await getJournalEntriesByJournalId(journalId.toString());
+
+			if (result && Array.isArray(result.$values)) {
+				setJournalEntries(result.$values);
+			} else {
+				console.warn("Unexpected journal entry response:", result);
+				setJournalEntries([]);
+			}
+		};
+
+		fetchEntries();
+	}, [journalId]);
 
 	return (
 		<>
@@ -80,10 +97,10 @@ export default function JournalView() {
 					<Text style={styles.sectionTitle}>Recent Entries</Text>
 
 					{/* Empty State */}
-					{filteredEntries.length === 0 ? (
+					{journalEntries.length === 0 ? (
 						<Text style={styles.emptyText}>No entries found.</Text>
 					) : (
-						filteredEntries.map((item: any, index: number) => (
+						journalEntries.map((item: any, index: number) => (
 							<TouchableOpacity
 								key={item.journalEntryId}
 								style={styles.entryCard}
@@ -99,9 +116,16 @@ export default function JournalView() {
 									})}
 								</Text>
 								<View style={styles.entryRow}>
-									<Text style={styles.entryText} numberOfLines={1}>
-										{item.title}
-									</Text>
+									<View style={{ flex: 1 }}>
+										<Text style={styles.entryText} numberOfLines={1}>
+											{item.title}
+										</Text>
+										{item.mood && moodMap[item.mood] && (
+											<Text style={{ fontSize: 18, marginTop: 4 }}>
+												{moodMap[item.mood]}
+											</Text>
+										)}
+									</View>
 									<View
 										style={[
 											styles.dot,

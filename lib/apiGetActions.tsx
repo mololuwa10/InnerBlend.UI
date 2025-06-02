@@ -141,7 +141,7 @@ export const getJournalEntryById = async (
 // Get Journal Entries by Journal Id
 export const getJournalEntriesByJournalId = async (
 	journalId: string
-): Promise<JournalEntry | null> => {
+): Promise<{ $id: string; $values: JournalEntry[] } | null> => {
 	try {
 		const token = await AsyncStorage.getItem("token");
 		if (!token) throw new Error("No token found");
@@ -163,7 +163,10 @@ export const getJournalEntriesByJournalId = async (
 			return null;
 		}
 
-		const data: JournalEntry = await response.json();
+		const raw = await response.json();
+		// Ensure the returned object has $id and $values properties
+		const data: { $id: string; $values: JournalEntry[] } | null =
+			raw && raw.$id && raw.$values ? raw : null;
 		return data;
 	} catch (error: any) {
 		console.error(
