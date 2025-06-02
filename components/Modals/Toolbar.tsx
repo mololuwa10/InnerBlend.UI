@@ -7,9 +7,11 @@ import { DarkColors } from "../../constants/Colors";
 export default function Toolbar({
 	onTagPress,
 	onLocationPress,
+	onMoodPress,
 }: {
 	onTagPress: () => void;
 	onLocationPress: () => void;
+	onMoodPress: () => void;
 }) {
 	// const icons: (
 	// 	| "image-outline"
@@ -47,7 +49,7 @@ export default function Toolbar({
 				/>
 			</TouchableOpacity>
 
-			<TouchableOpacity onPress={() => console.log("Mood")}>
+			<TouchableOpacity onPress={onMoodPress}>
 				<Ionicons name="happy-outline" size={24} color={DarkColors.highlight} />
 			</TouchableOpacity>
 

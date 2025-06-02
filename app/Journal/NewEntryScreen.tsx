@@ -1,3 +1,4 @@
+import MoodModal from "@/components/Modals/MoodModal";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -26,6 +27,8 @@ export default function NewEntryScreen() {
 	const [selectedDate, setSelectedDate] = useState(new Date());
 	const [showLocationModal, setShowLocationModal] = useState(false);
 	const [location, setLocation] = useState("");
+	const [showMoodModal, setShowMoodModal] = useState(false);
+	const [mood, setMood] = useState("");
 	const params = useLocalSearchParams();
 
 	const formattedDate = selectedDate
@@ -72,6 +75,13 @@ export default function NewEntryScreen() {
 				currentLocation={location}
 			/>
 
+			<MoodModal
+				visible={showMoodModal}
+				onClose={() => setShowMoodModal(false)}
+				onSelectMood={setMood}
+				currentMood={mood}
+			/>
+
 			<KeyboardAvoidingView
 				style={styles.wrapper}
 				behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -99,6 +109,20 @@ export default function NewEntryScreen() {
 				</View>
 
 				<View style={styles.body}>
+					{mood ? (
+						<Text
+							style={{ color: "#ccc", marginBottom: 5, paddingHorizontal: 20 }}
+						>
+							Mood: {mood}
+						</Text>
+					) : null}
+					{location ? (
+						<Text
+							style={{ color: "#ccc", marginBottom: 5, paddingHorizontal: 20 }}
+						>
+							Location: {location}
+						</Text>
+					) : null}
 					<TextInput
 						style={styles.input}
 						value={entry}
@@ -113,6 +137,7 @@ export default function NewEntryScreen() {
 				<Toolbar
 					onTagPress={() => setShowTagsModal(true)}
 					onLocationPress={() => setShowLocationModal(true)}
+					onMoodPress={() => setShowMoodModal(true)}
 				/>
 			</KeyboardAvoidingView>
 		</>
