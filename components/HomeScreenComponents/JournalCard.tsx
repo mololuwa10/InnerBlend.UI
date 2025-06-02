@@ -31,6 +31,7 @@ export default function JournalCard({ journal }: { journal: any }) {
 					router.push({
 						pathname: "/Journal/JournalView",
 						params: {
+							journalId: journal.journalId,
 							journalTitle: journal.journalTitle,
 							entries: JSON.stringify(entries),
 						},
@@ -44,7 +45,7 @@ export default function JournalCard({ journal }: { journal: any }) {
 						No entries yet.
 					</Text>
 				) : (
-					entries.map((entry: any) => (
+					entries.slice(0, 2).map((entry: any) => (
 						<View key={entry.journalEntryId} style={styles.entryRow}>
 							<Text style={styles.entryDate}>
 								{new Date(entry.dateCreated).toLocaleDateString("en-GB", {

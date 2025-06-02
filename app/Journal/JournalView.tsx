@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { DarkColors } from "../../constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import { Plus } from "lucide-react-native";
@@ -14,9 +13,11 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import { DarkColors } from "../../constants/Colors";
 
 export default function JournalView() {
-	const { journalTitle, entries } = useLocalSearchParams() as {
+	const { journalId, journalTitle, entries } = useLocalSearchParams() as {
+		journalId: string | number | undefined;
 		journalTitle: string;
 		entries: string;
 	};
@@ -117,7 +118,12 @@ export default function JournalView() {
 				</ScrollView>
 				{/* New Entry Button */}
 				<TouchableOpacity
-					onPress={() => router.push("/Journal/NewEntryScreen")}
+					onPress={() =>
+						router.push({
+							pathname: "/Journal/NewEntryScreen",
+							params: { journalId: journalId },
+						})
+					}
 					style={styles.newEntryButton}
 				>
 					<View style={styles.newEntryWrapper}>

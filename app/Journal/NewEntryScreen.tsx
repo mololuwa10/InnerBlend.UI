@@ -1,4 +1,5 @@
 import MoodModal from "@/components/Modals/MoodModal";
+import { createJournalEntry } from "@/lib/apiPostActions";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -29,6 +30,7 @@ export default function NewEntryScreen() {
 	const [location, setLocation] = useState("");
 	const [showMoodModal, setShowMoodModal] = useState(false);
 	const [mood, setMood] = useState("");
+	const [title, setTitle] = useState("");
 	const params = useLocalSearchParams();
 
 	const formattedDate = selectedDate
@@ -39,9 +41,35 @@ export default function NewEntryScreen() {
 		})
 		.toUpperCase();
 
-	const handleSave = () => {
+	const handleSave = async () => {
 		// TODO: Save the entry to the database
-		router.back();
+		const journalId = params?.journalId as string;
+		if (!journalId) {
+			console.error("Missing Journal Id");
+			alert("An unexpected error occurred. Please try again.");
+			return;
+		}
+
+		if (!entry.trim()) {
+			alert("Please enter a journal entry.");
+			return;
+		}
+
+		const success = await createJournalEntry(journalId, {
+			// Title: `Entry on ${formattedDate}`,
+			Title: title,
+			Content: entry,
+			Tags: tags,
+			Mood: mood || null,
+			Location: location || null,
+		});
+
+		if (success) {
+			alert("Journal entry saved!");
+			router.back();
+		} else {
+			alert("Failed to save journal entry.");
+		}
 	};
 
 	useEffect(() => {
@@ -123,6 +151,16 @@ export default function NewEntryScreen() {
 							Location: {location}
 						</Text>
 					) : null}
+
+					<TextInput
+						// style={styles.titleInput}
+						style={{ color: "#ccc", marginBottom: 5, paddingHorizontal: 20 }}
+						value={title}
+						onChangeText={setTitle}
+						placeholder="Title..."
+						placeholderTextColor={DarkColors.highlight}
+					/>
+
 					<TextInput
 						style={styles.input}
 						value={entry}

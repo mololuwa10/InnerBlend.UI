@@ -36,11 +36,11 @@ export interface Journal {
 }
 
 export interface JournalEntryInput {
-	title: string;
-	content: string;
-	tags?: string[];
-	mood?: "VerySad" | "Sad" | "Neutral" | "Happy" | "VeryHappy";
-	location?: string;
+	Title: string;
+	Content: string;
+	Tags?: string[];
+	Mood?: string | null;
+	Location?: string | null;
 }
 
 export interface JournalInput {
@@ -52,6 +52,7 @@ const ip =
 	Constants.expoConfig?.extra?.apiHost ||
 	Constants.manifest2?.extra?.apiHost ||
 	"localhost";
+
 // JOURNAL ======================================================================
 // Create Journal // POST: api/journal
 export const createJournal = async (
