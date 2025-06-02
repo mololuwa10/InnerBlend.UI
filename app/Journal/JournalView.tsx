@@ -266,7 +266,6 @@ const styles = StyleSheet.create({
 		alignSelf: "center",
 		position: "absolute",
 		bottom: 30,
-		// left: 100,
 		right: 10,
 		marginHorizontal: "auto",
 	},
