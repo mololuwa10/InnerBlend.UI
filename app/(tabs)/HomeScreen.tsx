@@ -32,30 +32,30 @@ export default function HomeScreen() {
 	const [loading, setLoading] = useState(true);
 	const [showCreateJournalModal, setShowCreateJournalModal] = useState(false);
 
+	const fetchJournals = useCallback(async () => {
+		setLoading(true);
+		try {
+			const data = await getJournals();
+			if (data && Array.isArray(data)) {
+				// Sort by dateCreated (most recent first)
+				const sortedData = [...data].sort(
+					(a, b) =>
+						new Date(b.dateCreated).getTime() -
+						new Date(a.dateCreated).getTime()
+				);
+				setJournals(sortedData);
+			}
+		} catch (err) {
+			console.error("Failed to load journals:", err);
+		} finally {
+			setLoading(false);
+		}
+	}, []);
+
 	useFocusEffect(
 		useCallback(() => {
-			const fetchJournals = async () => {
-				try {
-					const data = await getJournals();
-					if (data && Array.isArray(data)) {
-						// Sort by date created
-						const sortedData = [...data].sort((a, b) => {
-							return (
-								new Date(b.dateCreated).getTime() -
-								new Date(a.dateCreated).getTime()
-							);
-						});
-						setJournals(sortedData);
-					}
-				} catch (err) {
-					console.error("Failed to load journals:", err);
-				} finally {
-					setLoading(false);
-				}
-			};
-
 			fetchJournals();
-		}, [])
+		}, [fetchJournals])
 	);
 
 	return (
@@ -63,6 +63,7 @@ export default function HomeScreen() {
 			<CreateJournalModal
 				visible={showCreateJournalModal}
 				onClose={() => setShowCreateJournalModal(false)}
+				onSuccess={fetchJournals}
 			/>
 
 			<View style={styles.wrapper}>
