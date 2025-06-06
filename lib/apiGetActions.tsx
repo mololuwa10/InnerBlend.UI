@@ -164,7 +164,6 @@ export const getJournalEntriesByJournalId = async (
 		}
 
 		const raw = await response.json();
-		// Ensure the returned object has $id and $values properties
 		const data: { $id: string; $values: JournalEntry[] } | null =
 			raw && raw.$id && raw.$values ? raw : null;
 		return data;

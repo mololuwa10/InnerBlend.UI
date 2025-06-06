@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Ionicons } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
 import { router, useLocalSearchParams } from "expo-router";
 import { Plus } from "lucide-react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
 	Platform,
 	RefreshControl,
@@ -32,29 +33,36 @@ export default function JournalView() {
 	const [refreshing, setRefreshing] = useState(false);
 	const [search, setSearch] = useState("");
 
-	const onRefresh = () => {
+	const fetchEntries = useCallback(async () => {
+		if (!journalId) return;
+		const result = await getJournalEntriesByJournalId(journalId.toString());
+
+		if (result && Array.isArray(result.$values)) {
+			const sortedResultByDateCreated = result.$values.sort((a, b) => {
+				return (
+					new Date(b.dateCreated).getTime() - new Date(a.dateCreated).getTime()
+				);
+			});
+			setJournalEntries(sortedResultByDateCreated);
+		} else {
+			console.warn("Unexpected journal entry response:", result);
+			setJournalEntries([]);
+		}
+	}, [journalId]);
+
+	useFocusEffect(
+		useCallback(() => {
+			fetchEntries();
+		}, [fetchEntries])
+	);
+
+	const onRefresh = async () => {
 		setRefreshing(true);
-		// Simulate refresh (you can call backend here)
+		await fetchEntries();
 		setTimeout(() => {
 			setRefreshing(false);
 		}, 1000);
 	};
-
-	useEffect(() => {
-		const fetchEntries = async () => {
-			if (!journalId) return;
-			const result = await getJournalEntriesByJournalId(journalId.toString());
-
-			if (result && Array.isArray(result.$values)) {
-				setJournalEntries(result.$values);
-			} else {
-				console.warn("Unexpected journal entry response:", result);
-				setJournalEntries([]);
-			}
-		};
-
-		fetchEntries();
-	}, [journalId]);
 
 	return (
 		<>

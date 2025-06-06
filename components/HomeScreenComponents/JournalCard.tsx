@@ -45,19 +45,26 @@ export default function JournalCard({ journal }: { journal: any }) {
 						No entries yet.
 					</Text>
 				) : (
-					entries.slice(0, 2).map((entry: any) => (
-						<View key={entry.journalEntryId} style={styles.entryRow}>
-							<Text style={styles.entryDate}>
-								{new Date(entry.dateCreated).toLocaleDateString("en-GB", {
-									day: "2-digit",
-									month: "short",
-								})}
-							</Text>
-							<Text style={styles.entryTitle} numberOfLines={1}>
-								{entry.title}
-							</Text>
-						</View>
-					))
+					entries
+						.sort(
+							(a: any, b: any) =>
+								new Date(b.dateCreated).getTime() -
+								new Date(a.dateCreated).getTime()
+						)
+						.slice(0, 2)
+						.map((entry: any) => (
+							<View key={entry.journalEntryId} style={styles.entryRow}>
+								<Text style={styles.entryDate}>
+									{new Date(entry.dateCreated).toLocaleDateString("en-GB", {
+										day: "2-digit",
+										month: "short",
+									})}
+								</Text>
+								<Text style={styles.entryTitle} numberOfLines={1}>
+									{entry.title}
+								</Text>
+							</View>
+						))
 				)}
 			</TouchableOpacity>
 		</>

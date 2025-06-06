@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
 import { ListFilter, Plus } from "lucide-react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
 	ActivityIndicator,
 	ScrollView,
@@ -29,22 +30,33 @@ export default function HomeScreen() {
 	const [journals, setJournals] = useState<Journal[]>([]);
 	const [loading, setLoading] = useState(true);
 
-	useEffect(() => {
-		const fetchJournals = async () => {
-			try {
-				const data = await getJournals();
-				if (data) {
-					setJournals(data);
+	useFocusEffect(
+		useCallback(() => {
+			const fetchJournals = async () => {
+				try {
+					const data = await getJournals();
+					if (data && Array.isArray(data)) {
+						// Sort by date created
+						const sortedData = [...data].sort((a, b) => {
+							return (
+								new Date(b.dateCreated).getTime() -
+								new Date(a.dateCreated).getTime()
+							);
+						});
+						setJournals(sortedData);
+					}
+				} catch (err) {
+					console.error("Failed to load journals:", err);
+				} finally {
+					setLoading(false);
 				}
-			} catch (err) {
-				console.error("Failed to load journals:", err);
-			} finally {
-				setLoading(false);
-			}
-		};
+			};
 
-		fetchJournals();
-	}, []);
+			fetchJournals();
+		}, [])
+	);
+
+	// useEffect(() => {}, []);
 	return (
 		<View style={styles.wrapper}>
 			<ScrollView contentContainerStyle={styles.container}>
@@ -111,13 +123,6 @@ export default function HomeScreen() {
 						<JournalCard key={journal.journalId} journal={journal} />
 					))
 				)}
-				{/* <View style={styles.emptyState}>
-					<Ionicons name="book-outline" size={40} color={DarkColors.accent} />
-					<Text style={styles.emptyTitle}>No journal entries.</Text>
-					<Text style={styles.emptySubtitle}>
-						Begin your journey by adding a new entry.
-					</Text>
-				</View> */}
 			</ScrollView>
 
 			{/* New Entry Button */}
