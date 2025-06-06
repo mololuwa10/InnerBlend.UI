@@ -57,7 +57,6 @@ export default function CreateJournalModal({
 					<Pressable style={styles.modal} onPress={(e) => e.stopPropagation()}>
 						<Text style={styles.title}>Create Journal</Text>
 
-						{/* <View style={{ flex: 1 }}> */}
 						<TextInput
 							style={styles.input}
 							placeholderTextColor={"#888"}
@@ -86,7 +85,6 @@ export default function CreateJournalModal({
 							)}
 						</TouchableOpacity>
 
-						{/* </View> */}
 					</Pressable>
 				</Pressable>
 			</Modal>
