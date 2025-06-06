@@ -1,5 +1,3 @@
-/* eslint-disable import/no-unresolved */
-import { DarkColors } from "@/constants/Colors";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React from "react";
 import {
@@ -10,6 +8,7 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import { DarkColors } from "../../constants/Colors";
 
 export default function DateModal({
 	visible,

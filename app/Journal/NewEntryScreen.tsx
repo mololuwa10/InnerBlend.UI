@@ -1,5 +1,3 @@
-import MoodModal from "@/components/Modals/MoodModal";
-import { createJournalEntry } from "@/lib/apiPostActions";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -14,9 +12,11 @@ import {
 } from "react-native";
 import DateModal from "../../components/Modals/DateModal";
 import LocationModal from "../../components/Modals/LocationModal";
+import MoodModal from "../../components/Modals/MoodModal";
 import TagModal from "../../components/Modals/TagModal";
 import Toolbar from "../../components/Modals/Toolbar";
 import { DarkColors } from "../../constants/Colors";
+import { createJournalEntry } from "../../lib/apiPostActions";
 
 export default function NewEntryScreen() {
 	const router = useRouter();

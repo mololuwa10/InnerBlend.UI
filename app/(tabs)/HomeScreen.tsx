@@ -12,6 +12,7 @@ import {
 	View,
 } from "react-native";
 import JournalCard from "../../components/HomeScreenComponents/JournalCard";
+import CreateJournalModal from "../../components/Modals/CreateJournalModal";
 import { DarkColors } from "../../constants/Colors";
 import { getJournals, Journal } from "../../lib/apiGetActions";
 
@@ -29,6 +30,7 @@ const getDateString = (date: Date) => {
 export default function HomeScreen() {
 	const [journals, setJournals] = useState<Journal[]>([]);
 	const [loading, setLoading] = useState(true);
+	const [showCreateJournalModal, setShowCreateJournalModal] = useState(false);
 
 	useFocusEffect(
 		useCallback(() => {
@@ -56,83 +58,102 @@ export default function HomeScreen() {
 		}, [])
 	);
 
-	// useEffect(() => {}, []);
 	return (
-		<View style={styles.wrapper}>
-			<ScrollView contentContainerStyle={styles.container}>
-				{/* Top Navigation Bar */}
-				<View style={styles.header}>
-					<Text style={styles.appName}>InnerBlend</Text>
+		<>
+			<CreateJournalModal
+				visible={showCreateJournalModal}
+				onClose={() => setShowCreateJournalModal(false)}
+			/>
 
-					<View style={styles.searchContainer}>
-						<Ionicons name="search" color={DarkColors.textPrimary} size={18} />
-						<TextInput
-							placeholder="Search"
-							placeholderTextColor={DarkColors.accent}
-							style={styles.searchInput}
-						/>
+			<View style={styles.wrapper}>
+				<ScrollView contentContainerStyle={styles.container}>
+					{/* Top Navigation Bar */}
+					<View style={styles.header}>
+						<Text style={styles.appName}>InnerBlend</Text>
+
+						<View style={styles.searchContainer}>
+							<Ionicons
+								name="search"
+								color={DarkColors.textPrimary}
+								size={18}
+							/>
+							<TextInput
+								placeholder="Search"
+								placeholderTextColor={DarkColors.accent}
+								style={styles.searchInput}
+							/>
+						</View>
+
+						<TouchableOpacity>
+							<Ionicons
+								name="person-circle"
+								size={28}
+								color={DarkColors.highlight}
+							/>
+						</TouchableOpacity>
 					</View>
 
-					<TouchableOpacity>
-						<Ionicons
-							name="person-circle"
-							size={28}
-							color={DarkColors.highlight}
-						/>
-					</TouchableOpacity>
-				</View>
+					{/* Stories */}
+					<ScrollView
+						horizontal
+						showsHorizontalScrollIndicator={false}
+						style={styles.storyScroll}
+					>
+						<View style={styles.cardToday}>
+							<Text style={styles.cardTitle}>Today</Text>
+							<Text style={styles.cardSubtitle}>
+								{getDateString(new Date())}
+							</Text>
+						</View>
 
-				{/* Stories */}
-				<ScrollView
-					horizontal
-					showsHorizontalScrollIndicator={false}
-					style={styles.storyScroll}
-				>
-					<View style={styles.cardToday}>
-						<Text style={styles.cardTitle}>Today</Text>
-						<Text style={styles.cardSubtitle}>{getDateString(new Date())}</Text>
-					</View>
-
-					{/* <View style={styles.cardMuted}>
+						{/* <View style={styles.cardMuted}>
 						<Text style={styles.cardTitle}>Throwback</Text>
 						<Text style={styles.cardSubtitle}>No throwback</Text>
 					</View> */}
+					</ScrollView>
+
+					<View style={styles.journalFilterContainer}>
+						<Text style={styles.journalFilter}>Journals</Text>
+						<TouchableOpacity>
+							<ListFilter size={28} color={DarkColors.textPrimary} />
+						</TouchableOpacity>
+					</View>
+
+					{/* Empty State */}
+					{/* Cards or Empty */}
+					{loading ? (
+						<ActivityIndicator size="large" color={DarkColors.accent} />
+					) : journals.length === 0 ? (
+						<View style={styles.emptyState}>
+							<Ionicons
+								name="book-outline"
+								size={40}
+								color={DarkColors.accent}
+							/>
+							<Text style={styles.emptyTitle}>No journal entries.</Text>
+							<Text style={styles.emptySubtitle}>
+								Begin your journey by adding a new entry.
+							</Text>
+						</View>
+					) : (
+						journals.map((journal) => (
+							<JournalCard key={journal.journalId} journal={journal} />
+						))
+					)}
 				</ScrollView>
 
-				<View style={styles.journalFilterContainer}>
-					<Text style={styles.journalFilter}>Journals</Text>
-					<TouchableOpacity>
-						<ListFilter size={28} color={DarkColors.textPrimary} />
-					</TouchableOpacity>
-				</View>
-
-				{/* Empty State */}
-				{/* Cards or Empty */}
-				{loading ? (
-					<ActivityIndicator size="large" color={DarkColors.accent} />
-				) : journals.length === 0 ? (
-					<View style={styles.emptyState}>
-						<Ionicons name="book-outline" size={40} color={DarkColors.accent} />
-						<Text style={styles.emptyTitle}>No journal entries.</Text>
-						<Text style={styles.emptySubtitle}>
-							Begin your journey by adding a new entry.
-						</Text>
+				{/* New Entry Button */}
+				<TouchableOpacity
+					style={styles.newEntryButton}
+					onPress={() => setShowCreateJournalModal(true)}
+				>
+					<View style={styles.newEntryWrapper}>
+						<Plus color={DarkColors.textPrimary} size={22} />
+						<Text style={styles.newEntryText}>New Journal</Text>
 					</View>
-				) : (
-					journals.map((journal) => (
-						<JournalCard key={journal.journalId} journal={journal} />
-					))
-				)}
-			</ScrollView>
-
-			{/* New Entry Button */}
-			<TouchableOpacity style={styles.newEntryButton}>
-				<View style={styles.newEntryWrapper}>
-					<Plus color={DarkColors.textPrimary} size={22} />
-					<Text style={styles.newEntryText}>New Journal</Text>
-				</View>
-			</TouchableOpacity>
-		</View>
+				</TouchableOpacity>
+			</View>
+		</>
 	);
 }
 
