@@ -2,7 +2,7 @@
 
 import { router } from "expo-router";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { DarkColors } from "../../constants/Colors";
 
 const getDateString = (date: Date) => {
@@ -19,12 +19,6 @@ export default function JournalPageCard({ journal }: { journal: any }) {
 
 	return (
 		<>
-			<Text style={styles.journalDate}>
-				{getDateString(new Date(journal.dateCreated))} .{" "}
-				{new Date(journal.dateCreated).toLocaleDateString("en-GB", {
-					weekday: "short",
-				})}
-			</Text>
 			<TouchableOpacity
 				style={styles.card}
 				onPress={() =>
@@ -39,33 +33,14 @@ export default function JournalPageCard({ journal }: { journal: any }) {
 				}
 			>
 				<Text style={styles.title}>{journal.journalTitle}</Text>
+				<Text style={styles.description}>{journal.journalDescription}</Text>
 
-				{entries.length === 0 ? (
-					<Text style={[styles.subtitle, { marginTop: 10 }]}>
-						No entries yet.
-					</Text>
-				) : (
-					entries
-						.sort(
-							(a: any, b: any) =>
-								new Date(b.dateCreated).getTime() -
-								new Date(a.dateCreated).getTime()
-						)
-						.slice(0, 2)
-						.map((entry: any) => (
-							<View key={entry.journalEntryId} style={styles.entryRow}>
-								<Text style={styles.entryDate}>
-									{new Date(entry.dateCreated).toLocaleDateString("en-GB", {
-										day: "2-digit",
-										month: "short",
-									})}
-								</Text>
-								<Text style={styles.entryTitle} numberOfLines={1}>
-									{entry.title}
-								</Text>
-							</View>
-						))
-				)}
+				<Text style={styles.journalDate}>
+					{getDateString(new Date(journal.dateCreated))} .{" "}
+					{new Date(journal.dateCreated).toLocaleDateString("en-GB", {
+						weekday: "short",
+					})}
+				</Text>
 			</TouchableOpacity>
 		</>
 	);
@@ -79,16 +54,22 @@ const styles = StyleSheet.create({
 		borderRadius: 20,
 	},
 	journalDate: {
-		textAlign: "center",
+		textAlign: "left",
 		color: DarkColors.textPrimary,
 		paddingVertical: 15,
-		fontFamily: "ComicNeue-Bold",
-		fontSize: 16,
+		fontFamily: "ComicNeue-Regular",
+		fontSize: 14,
 	},
 	title: {
 		color: DarkColors.textPrimary,
-		fontSize: 18,
+		fontSize: 23,
 		fontFamily: "ComicNeue-Bold",
+		marginBottom: 5,
+	},
+	description: {
+		color: DarkColors.textPrimary,
+		fontSize: 16,
+		fontFamily: "ComicNeue-Regular",
 		marginBottom: 5,
 	},
 	subtitle: {
@@ -108,7 +89,6 @@ const styles = StyleSheet.create({
 		color: DarkColors.highlight,
 		fontSize: 14,
 		width: 80,
-		// flex: 1,
 	},
 	entryTitle: {
 		fontFamily: "ComicNeue-Bold",
