@@ -1,7 +1,4 @@
-/* eslint-disable import/no-unresolved */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
-import { DarkColors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { Plus } from "lucide-react-native";
 import React, { useState } from "react";
@@ -14,6 +11,7 @@ import {
 	View,
 } from "react-native";
 import { CalendarList } from "react-native-calendars";
+import { DarkColors } from "../../constants/Colors";
 
 const { width } = Dimensions.get("window");
 
@@ -34,7 +32,7 @@ export default function CalendarViewScreen() {
 		<>
 			<View style={styles.container}>
 				<View style={styles.header}>
-					<Text style={styles.appName}>InnerBlend</Text>
+					<Text style={styles.appName}>Calender</Text>
 
 					<View style={styles.searchContainer}>
 						<Ionicons name="search" color={DarkColors.textPrimary} size={18} />

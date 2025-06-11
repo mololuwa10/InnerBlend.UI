@@ -33,7 +33,7 @@ export default function HomeScreen() {
 	const [showCreateJournalModal, setShowCreateJournalModal] = useState(false);
 
 	const fetchJournals = useCallback(async () => {
-		setLoading(true);
+		setLoading(true); 
 		try {
 			const data = await getJournals();
 			if (data && Array.isArray(data)) {

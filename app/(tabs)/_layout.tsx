@@ -1,18 +1,11 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-	Home,
-	PlusSquare,
-	BookText,
-	User,
-	Menu,
-	Calendar,
-} from "lucide-react-native";
-import React from "react";
-import { View, Text } from "react-native";
-import { Colors, DarkColors } from "@/constants/Colors";
 import MoreSection from "@/components/ProfilePageComponents/MoreSection";
-import HomeScreen from "./HomeScreen";
+import { DarkColors } from "@/constants/Colors";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { BookText, Calendar, Home, Menu } from "lucide-react-native";
+import React from "react";
 import CalenderViewScreen from "./CalendarViewScreen";
+import HomeScreen from "./HomeScreen";
+import JournalScreen from "./JournalScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -22,22 +15,6 @@ const Tab = createBottomTabNavigator();
 // 		<Text>Home</Text>
 // 	</View>
 // );
-const WriteScreen = () => (
-	<View>
-		<Text>New Entry</Text>
-	</View>
-);
-const JournalScreen = () => (
-	<View>
-		<Text>All Entries</Text>
-	</View>
-);
-const ProfileScreen = () => (
-	<View>
-		<Text>Profile</Text>
-	</View>
-);
-
 export default function BottomTabs() {
 	return (
 		<Tab.Navigator
