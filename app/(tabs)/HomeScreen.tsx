@@ -33,7 +33,7 @@ export default function HomeScreen() {
 	const [showCreateJournalModal, setShowCreateJournalModal] = useState(false);
 
 	const fetchJournals = useCallback(async () => {
-		setLoading(true); 
+		setLoading(true);
 		try {
 			const data = await getJournals();
 			if (data && Array.isArray(data)) {
@@ -137,9 +137,11 @@ export default function HomeScreen() {
 							</Text>
 						</View>
 					) : (
-						journals.map((journal) => (
-							<JournalCard key={journal.journalId} journal={journal} />
-						))
+						journals
+							.slice(0, 3)
+							.map((journal) => (
+								<JournalCard key={journal.journalId} journal={journal} />
+							))
 					)}
 				</ScrollView>
 
