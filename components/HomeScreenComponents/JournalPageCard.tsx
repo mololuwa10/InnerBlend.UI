@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#2A2A33",
 		padding: 20,
 		marginBottom: 20,
-		borderRadius: 20,
+		borderRadius: 13,
 	},
 	journalDate: {
 		textAlign: "left",
@@ -76,25 +76,5 @@ const styles = StyleSheet.create({
 		color: DarkColors.accent,
 		fontSize: 14,
 		fontFamily: "ComicNeue-Regular",
-	},
-	entryRow: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-		marginTop: 10,
-		gap: 12,
-	},
-	entryDate: {
-		fontFamily: "ComicNeue-Regular",
-		color: DarkColors.highlight,
-		fontSize: 14,
-		width: 80,
-	},
-	entryTitle: {
-		fontFamily: "ComicNeue-Bold",
-		color: DarkColors.textPrimary,
-		fontSize: 14,
-		flex: 1,
-		textAlign: "right",
 	},
 });
