@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
 	scrollViewContainer: {
 		paddingTop: 10,
 		paddingHorizontal: 20,
-		paddingBottom: 100,
+		paddingBottom: 10,
 	},
 	header: {
 		flexDirection: "row",

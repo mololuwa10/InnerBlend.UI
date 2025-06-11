@@ -121,7 +121,7 @@ export default function FirstSection() {
 					</Text>
 				</TouchableOpacity>
 
-				<TouchableOpacity
+				{/* <TouchableOpacity
 					style={{
 						flex: 1,
 						flexDirection: "row",
@@ -131,7 +131,7 @@ export default function FirstSection() {
 						marginStart: 10,
 					}}
 					onPress={() => {
-						navigation.navigate("TaskList");
+						navigation.navigate("(tabs)/JournalScreen");
 					}}
 				>
 					<Ionicons
@@ -154,7 +154,7 @@ export default function FirstSection() {
 					>
 						My Journals
 					</Text>
-				</TouchableOpacity>
+				</TouchableOpacity> */}
 
 				{/* <TouchableOpacity
 					style={{

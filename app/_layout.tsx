@@ -44,13 +44,16 @@ export default function RootLayout() {
 				<Stack.Screen name="OnboardingTwo" options={{ headerShown: false }} />
 				<Stack.Screen name="OnboardingThree" options={{ headerShown: false }} />
 				<Stack.Screen name="WelcomeScreen" options={{ headerShown: false }} />
-				{/* <Stack.Screen name="OnboardingPager" options={{ headerShown: false }} /> */}
 				<Stack.Screen name="SignUpScreen" options={{ headerShown: false }} />
 				<Stack.Screen name="LogInScreen" options={{ headerShown: false }} />
 				<Stack.Screen name="JournalView" options={{ headerShown: false }} />
 				<Stack.Screen name="PersonalInfo" options={{ headerShown: false }} />
 				<Stack.Screen name="ProfileScreen" options={{ headerShown: false }} />
 				<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+				<Stack.Screen
+					name="(tabs)/JournalScreen"
+					options={{ headerShown: false }}
+				/>
 				<Stack.Screen name="Journal" options={{ headerShown: false }} />
 				<Stack.Screen
 					name="Journal/JournalView"
