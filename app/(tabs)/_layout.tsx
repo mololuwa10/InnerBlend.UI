@@ -1,8 +1,8 @@
-import MoreSection from "@/components/ProfilePageComponents/MoreSection";
-import { DarkColors } from "@/constants/Colors";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { BookText, Calendar, Home, Menu } from "lucide-react-native";
 import React from "react";
+import MoreSection from "../../components/ProfilePageComponents/MoreSection";
+import { DarkColors } from "../../constants/Colors";
 import CalenderViewScreen from "./CalendarViewScreen";
 import HomeScreen from "./HomeScreen";
 import JournalScreen from "./JournalScreen";
