@@ -25,6 +25,11 @@ export interface UpdateJournalEntryInput {
 	tags?: string[];
 }
 
+export interface MoveJournalEntry {
+	entryId: string | number;
+	journalId: string | number;
+}
+
 const ip =
 	Constants.expoConfig?.extra?.apiHost ||
 	Constants.manifest2?.extra?.apiHost ||
@@ -162,6 +167,47 @@ export const updateJournalEntry = async (
 		return data;
 	} catch (error: any) {
 		console.error("There was an error updating journal entry: ", error);
+		return null;
+	}
+};
+
+// MOVE JOURNAL ENTRY
+export const moveJournalEntry = async (
+	entryId: string,
+	journalId: string
+): Promise<boolean | null> => {
+	try {
+		const token = await AsyncStorage.getItem("token");
+		if (!token) throw new Error("No token found");
+
+		const payload: MoveJournalEntry = {
+			entryId,
+			journalId,
+		};
+
+		const response = await fetch(
+			`http://${ip}:5183/api/journalentry/move-entry`,
+			{
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+				body: JSON.stringify(payload),
+			}
+		);
+
+		if (!response.ok) {
+			const errorMsg = await response.text();
+			console.error("Failed to move journal entry:", errorMsg);
+			return false;
+		}
+
+		const result = await response.text();
+		console.log(result);
+		return true;
+	} catch (error: any) {
+		console.error("There was an error moving journal entry: ", error);
 		return null;
 	}
 };

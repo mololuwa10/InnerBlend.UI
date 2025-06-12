@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { router } from "expo-router";
-import React from "react";
+import { EllipsisVertical } from "lucide-react-native";
+import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { DarkColors } from "../../constants/Colors";
 
@@ -16,6 +18,8 @@ const getDateString = (date: Date) => {
 
 export default function JournalCard({ journal }: { journal: any }) {
 	const entries = journal.journalEntries?.$values || [];
+
+	const [showOptions, setShowOptions] = useState(false);
 
 	return (
 		<>
@@ -38,7 +42,13 @@ export default function JournalCard({ journal }: { journal: any }) {
 					})
 				}
 			>
-				<Text style={styles.title}>{journal.journalTitle}</Text>
+				<View style={styles.headerRow}>
+					<Text style={styles.title}>{journal.journalTitle}</Text>
+
+					<TouchableOpacity onPress={() => setShowOptions(true)}>
+						<EllipsisVertical size={18} color="#fff" />
+					</TouchableOpacity>
+				</View>
 
 				{entries.length === 0 ? (
 					<Text style={[styles.subtitle, { marginTop: 10 }]}>
@@ -77,6 +87,33 @@ const styles = StyleSheet.create({
 		padding: 20,
 		marginBottom: 20,
 		borderRadius: 20,
+	},
+	headerRow: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+		marginBottom: 10,
+	},
+	modalBackground: {
+		backgroundColor: "rgba(0,0,0,0.4)",
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	optionsContainer: {
+		backgroundColor: "#333",
+		borderRadius: 10,
+		paddingVertical: 10,
+		paddingHorizontal: 20,
+		width: 200,
+	},
+	option: {
+		paddingVertical: 10,
+	},
+	optionText: {
+		color: "#fff",
+		fontFamily: "ComicNeue-Regular",
+		fontSize: 16,
 	},
 	journalDate: {
 		textAlign: "center",
