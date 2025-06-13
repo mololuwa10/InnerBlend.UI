@@ -48,7 +48,7 @@ export const deleteUser = async () => {
 // JOURNAL ENTRIES ================================================================
 // DELETE JOURNAL ENTRY
 export const deleteJournalEntry = async (
-	entryId: string
+	entryId: string | number
 ): Promise<boolean | null> => {
 	const token = await AsyncStorage.getItem("token");
 	if (!token) throw new Error("No token found");
