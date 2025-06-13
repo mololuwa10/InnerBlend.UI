@@ -2,10 +2,11 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { router, useLocalSearchParams } from "expo-router";
-import { Plus } from "lucide-react-native";
-import React, { useCallback, useState } from "react";
+import { EllipsisVertical, Plus } from "lucide-react-native";
+import React, { useCallback, useRef, useState } from "react";
 import {
 	Platform,
+	Pressable,
 	RefreshControl,
 	ScrollView,
 	StyleSheet,
@@ -32,6 +33,18 @@ export default function JournalView() {
 	const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([]);
 	const [refreshing, setRefreshing] = useState(false);
 	const [search, setSearch] = useState("");
+	const [optionsPosition, setOptionsPosition] = useState<{
+		x: number;
+		y: number;
+	} | null>(null);
+	const [selectedEntryId, setSelectedEntryId] = useState<number | null>(null);
+	const entryRefs = useRef<{ [key: string]: any }>({});
+
+	const handleOptionsPress = (options: string) => {
+		// setShowOptions(false);
+
+		console.log(options);
+	};
 
 	const fetchEntries = useCallback(async () => {
 		if (!journalId) return;
@@ -116,13 +129,39 @@ export default function JournalView() {
 									console.log("Tapped entry:", item.title);
 								}}
 							>
-								<Text style={styles.entryDate}>
-									{new Date(item.dateCreated).toLocaleDateString("en-GB", {
-										day: "2-digit",
-										month: "long",
-										year: "numeric",
-									})}
-								</Text>
+								<View style={styles.entryRow}>
+									<Text style={styles.entryDate}>
+										{new Date(item.dateCreated).toLocaleDateString("en-GB", {
+											day: "2-digit",
+											month: "long",
+											year: "numeric",
+										})}
+									</Text>
+
+									<TouchableOpacity
+										ref={(ref) => {
+											entryRefs.current[item.journalEntryId] = ref;
+										}}
+										onPress={() => {
+											entryRefs.current[item.journalEntryId]?.measure?.(
+												(
+													fx: any,
+													fy: any,
+													width: any,
+													height: any,
+													px: any,
+													py: any
+												) => {
+													setOptionsPosition({ x: px, y: py + height });
+													setSelectedEntryId(item.journalEntryId);
+												}
+											);
+										}}
+									>
+										<EllipsisVertical size={24} color="#fff" />
+									</TouchableOpacity>
+								</View>
+
 								<View style={styles.entryRow}>
 									<View style={{ flex: 1 }}>
 										<Text style={styles.entryText} numberOfLines={1}>
@@ -163,6 +202,44 @@ export default function JournalView() {
 						<Text style={styles.newEntryText}>New Entry</Text>
 					</View>
 				</TouchableOpacity>
+
+				{optionsPosition && selectedEntryId && (
+					<Pressable
+						style={StyleSheet.absoluteFill}
+						onPress={() => setOptionsPosition(null)}
+					>
+						<View
+							style={[
+								styles.optionsContainer,
+								{
+									position: "absolute",
+									top: optionsPosition.y,
+									left: optionsPosition.x - 160, // adjust for alignment
+								},
+							]}
+						>
+							<TouchableOpacity
+								style={styles.option}
+								onPress={() => {
+									handleOptionsPress("Move");
+									setOptionsPosition(null);
+								}}
+							>
+								<Text style={styles.optionText}>Move</Text>
+							</TouchableOpacity>
+
+							<TouchableOpacity
+								style={styles.option}
+								onPress={() => {
+									handleOptionsPress("Delete");
+									setOptionsPosition(null);
+								}}
+							>
+								<Text style={styles.optionText}>Delete</Text>
+							</TouchableOpacity>
+						</View>
+					</Pressable>
+				)}
 			</View>
 		</>
 	);
@@ -247,6 +324,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
+		marginBottom: 10,
 	},
 	entryText: {
 		color: DarkColors.textPrimary,
@@ -286,5 +364,20 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		gap: 6,
+	},
+	optionsContainer: {
+		backgroundColor: "#333",
+		borderRadius: 10,
+		paddingVertical: 10,
+		paddingHorizontal: 20,
+		width: 200,
+	},
+	option: {
+		paddingVertical: 10,
+	},
+	optionText: {
+		color: DarkColors.textPrimary,
+		fontFamily: "ComicNeue-Regular",
+		fontSize: 16,
 	},
 });

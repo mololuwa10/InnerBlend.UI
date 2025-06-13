@@ -59,7 +59,7 @@ export default function OnboardingTwo() {
 
 			{/* Bottom Navigation */}
 			<View style={styles.bottomNav}>
-				<TouchableOpacity onPress={() => navigation.navigate("Login")}>
+				<TouchableOpacity onPress={() => navigation.navigate("WelcomeScreen")}>
 					<Text style={styles.skip}>Skip</Text>
 				</TouchableOpacity>
 

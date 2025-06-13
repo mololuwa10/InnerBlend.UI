@@ -20,6 +20,7 @@ export default function JournalCard({ journal }: { journal: any }) {
 	const entries = journal.journalEntries?.$values || [];
 
 	const [showOptions, setShowOptions] = useState(false);
+	const [refreshing, setRefreshing] = useState(false);
 
 	return (
 		<>
