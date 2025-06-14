@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { Plus } from "lucide-react-native";
 import React, { useState } from "react";
 import {
@@ -21,6 +23,7 @@ export default function CalendarViewScreen() {
 	);
 	const [showSearch, setShowSearch] = useState(true);
 	const [scrollY, setScrollY] = useState(0);
+	const navigation = useNavigation<StackNavigationProp<any>>();
 
 	const renderEntry = ({ item }: { item: { id: number; text: string } }) => (
 		<View style={styles.entryCard}>
@@ -43,7 +46,7 @@ export default function CalendarViewScreen() {
 						/>
 					</View>
 
-					<TouchableOpacity>
+					<TouchableOpacity onPress={() => navigation.navigate("PersonalInfo")}>
 						<Ionicons
 							name="person-circle"
 							size={28}

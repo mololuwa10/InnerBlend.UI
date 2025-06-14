@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { ListFilter, Plus } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
 import {
@@ -31,6 +32,8 @@ export default function HomeScreen() {
 	const [journals, setJournals] = useState<Journal[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [showCreateJournalModal, setShowCreateJournalModal] = useState(false);
+
+	const navigation = useNavigation<StackNavigationProp<any>>();
 
 	const fetchJournals = useCallback(async () => {
 		setLoading(true);
@@ -85,7 +88,9 @@ export default function HomeScreen() {
 							/>
 						</View>
 
-						<TouchableOpacity>
+						<TouchableOpacity
+							onPress={() => navigation.navigate("PersonalInfo")}
+						>
 							<Ionicons
 								name="person-circle"
 								size={28}
