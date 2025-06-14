@@ -2,8 +2,15 @@
 "use client";
 
 import { router } from "expo-router";
-import React, { useState } from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useRef, useState } from "react";
+import {
+	Alert,
+	Animated,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from "react-native";
 import { DarkColors } from "../../constants/Colors";
 import { deleteJournal } from "../../lib/apiDeleteActions";
 
@@ -28,6 +35,8 @@ export default function JournalCard({
 	const [showOptions, setShowOptions] = useState(false);
 	const [refreshing, setRefreshing] = useState(false);
 
+	const fadeAnim = useRef(new Animated.Value(1)).current;
+
 	return (
 		<>
 			<Text style={styles.journalDate}>
@@ -36,73 +45,88 @@ export default function JournalCard({
 					weekday: "short",
 				})}
 			</Text>
-			<TouchableOpacity
-				style={styles.card}
-				onPress={() =>
-					router.push({
-						pathname: "/Journal/JournalView",
-						params: {
-							journalId: journal.journalId,
-							journalTitle: journal.journalTitle,
-							entries: JSON.stringify(entries),
-						},
-					})
-				}
-				onLongPress={() => {
-					Alert.alert(
-						"Delete Journal",
-						"Are you sure you want to delete this journal?",
-						[
-							{ text: "Cancel", style: "cancel" },
-							{
-								text: "Delete",
-								style: "destructive",
-								onPress: async () => {
-									const result = await deleteJournal(journal.journalId);
-									if (result) {
-										onDelete?.();
-									}
-								},
-							},
-						]
-					);
-				}}
-			>
-				<View style={styles.headerRow}>
-					<Text style={styles.title}>{journal.journalTitle}</Text>
 
-					{/* <TouchableOpacity onPress={() => setShowOptions(true)}>
+			<Animated.View style={{ opacity: fadeAnim }}>
+				<TouchableOpacity
+					style={styles.card}
+					onPress={() =>
+						router.push({
+							pathname: "/Journal/JournalView",
+							params: {
+								journalId: journal.journalId,
+								journalTitle: journal.journalTitle,
+								entries: JSON.stringify(entries),
+							},
+						})
+					}
+					onLongPress={() => {
+						Alert.alert(
+							"Delete Journal",
+							"Are you sure you want to delete this journal?",
+							[
+								{ text: "Cancel", style: "cancel" },
+								{
+									text: "Delete",
+									style: "destructive",
+									onPress: async () => {
+										Animated.timing(fadeAnim, {
+											toValue: 0,
+											duration: 300,
+											useNativeDriver: true,
+										}).start(async () => {
+											const result = await deleteJournal(journal.journalId);
+											if (result) {
+												onDelete?.();
+											} else {
+												Animated.timing(fadeAnim, {
+													toValue: 1,
+													duration: 300,
+													useNativeDriver: true,
+												}).start();
+											}
+										});
+									},
+								},
+							]
+						);
+					}}
+				>
+					<View style={styles.headerRow}>
+						<Text style={styles.title}>{journal.journalTitle}</Text>
+
+						{/* <TouchableOpacity onPress={() => setShowOptions(true)}>
 						<EllipsisVertical size={18} color="#fff" />
 					</TouchableOpacity> */}
-				</View>
+					</View>
 
-				{entries.length === 0 ? (
-					<Text style={[styles.subtitle, { marginTop: 10 }]}>
-						No entries yet.
-					</Text>
-				) : (
-					entries
-						.sort(
-							(a: any, b: any) =>
-								new Date(b.dateCreated).getTime() -
-								new Date(a.dateCreated).getTime()
-						)
-						.slice(0, 2)
-						.map((entry: any) => (
-							<View key={entry.journalEntryId} style={styles.entryRow}>
-								<Text style={styles.entryDate}>
-									{new Date(entry.dateCreated).toLocaleDateString("en-GB", {
-										day: "2-digit",
-										month: "short",
-									})}
-								</Text>
-								<Text style={styles.entryTitle} numberOfLines={1}>
-									{entry.title}
-								</Text>
-							</View>
-						))
-				)}
-			</TouchableOpacity>
+					{entries.length === 0 ? (
+						<Text style={[styles.subtitle, { marginTop: 10 }]}>
+							No entries yet.
+						</Text>
+					) : (
+						entries
+							.sort(
+								(a: any, b: any) =>
+									new Date(b.dateCreated).getTime() -
+									new Date(a.dateCreated).getTime()
+							)
+							.slice(0, 2)
+							.map((entry: any) => (
+								<View key={entry.journalEntryId} style={styles.entryRow}>
+									<Text style={styles.entryDate}>
+										{new Date(entry.dateCreated).toLocaleDateString("en-GB", {
+											day: "2-digit",
+											month: "short",
+										})}
+									</Text>
+									<Text style={styles.entryTitle} numberOfLines={1}>
+										{entry.title}
+									</Text>
+								</View>
+							))
+					)}
+				</TouchableOpacity>
+			</Animated.View>
 		</>
 	);
 }

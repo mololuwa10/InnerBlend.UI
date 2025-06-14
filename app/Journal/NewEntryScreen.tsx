@@ -68,7 +68,9 @@ export default function NewEntryScreen() {
 			alert("Journal entry saved!");
 			router.back();
 		} else {
-			alert("Failed to save journal entry.");
+			alert(
+				"Failed to save journal entry.\n\nEnsure Title and content are not empty."
+			);
 		}
 	};
 
