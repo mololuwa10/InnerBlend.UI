@@ -264,7 +264,8 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		paddingVertical: 10,
 		paddingHorizontal: 20,
-		paddingTop: Platform.OS === "ios" ? 50 : 10,
+		paddingTop: Platform.OS === "ios" ? 50 : 35,
+		// paddingBottom: 10,
 	},
 	headerText: {
 		fontSize: 20,

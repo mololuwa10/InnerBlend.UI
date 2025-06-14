@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		paddingHorizontal: 20,
-		paddingTop: Platform.OS === "ios" ? 50 : 40,
+		paddingTop: Platform.OS === "ios" ? 50 : 35,
 	},
 	headerTitleWrapper: {
 		flex: 1,
