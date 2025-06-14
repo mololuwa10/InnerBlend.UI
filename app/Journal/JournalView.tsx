@@ -5,6 +5,7 @@ import { EllipsisVertical, Plus } from "lucide-react-native";
 import React, { useCallback, useRef, useState } from "react";
 import {
 	Alert,
+	Animated,
 	Platform,
 	Pressable,
 	RefreshControl,
@@ -41,6 +42,7 @@ export default function JournalView() {
 		string | number | null
 	>(null);
 	const entryRefs = useRef<{ [key: string]: any }>({});
+	const fadeAnim = useRef(new Animated.Value(1)).current;
 
 	const fetchEntries = useCallback(async () => {
 		if (!journalId) return;
@@ -80,12 +82,26 @@ export default function JournalView() {
 				style: "destructive",
 				onPress: async () => {
 					try {
-						const success = await deleteJournalEntry(entryId);
-						if (success) fetchEntries();
+						Animated.timing(fadeAnim, {
+							toValue: 0,
+							duration: 300,
+							useNativeDriver: true,
+						}).start(async () => {
+							const success = await deleteJournalEntry(entryId);
+							if (success) {
+								fetchEntries();
+							} else {
+								Animated.timing(fadeAnim, {
+									toValue: 1,
+									duration: 300,
+									useNativeDriver: true,
+								}).start();
+							}
 
-						//reset selected entry id
-						setSelectedEntryId(null);
-						setOptionsPosition(null);
+							//reset selected entry id
+							setSelectedEntryId(null);
+							setOptionsPosition(null);
+						});
 					} catch (error: any) {
 						console.error(error);
 					}
@@ -118,49 +134,53 @@ export default function JournalView() {
 	};
 
 	const renderEntryCard = (entry: JournalEntry, index: number) => (
-		<TouchableOpacity
-			key={entry.journalEntryId}
-			style={styles.entryCard}
-			onPress={() => console.log("Tapped entry:", entry.title)}
-		>
-			<View style={styles.entryRow}>
-				<Text style={styles.entryDate}>
-					{new Date(entry.dateCreated).toLocaleDateString("en-GB", {
-						day: "2-digit",
-						month: "long",
-						year: "numeric",
-					})}
-				</Text>
-
-				<TouchableOpacity
-					ref={(ref) => {
-						entryRefs.current[entry.journalEntryId] = ref;
-					}}
-					onPress={() => handleOptionsToggle(entry.journalEntryId)}
-				>
-					<EllipsisVertical size={24} color="#fff" />
-				</TouchableOpacity>
-			</View>
-
-			<View style={styles.entryRow}>
-				<View style={{ flex: 1 }}>
-					<Text style={styles.entryText} numberOfLines={1}>
-						{entry.title}
+		<Animated.View style={{ opacity: fadeAnim }}>
+			<TouchableOpacity
+				key={entry.journalEntryId}
+				style={styles.entryCard}
+				onPress={() => console.log("Tapped entry:", entry.title)}
+			>
+				<View style={styles.entryRow}>
+					<Text style={styles.entryDate}>
+						{new Date(entry.dateCreated).toLocaleDateString("en-GB", {
+							day: "2-digit",
+							month: "long",
+							year: "numeric",
+						})}
 					</Text>
-					{entry.mood && moodMap[entry.mood] && (
-						<Text style={{ fontSize: 18, marginTop: 4 }}>
-							{moodMap[entry.mood]}
-						</Text>
-					)}
+
+					<TouchableOpacity
+						ref={(ref) => {
+							entryRefs.current[entry.journalEntryId] = ref;
+						}}
+						onPress={() => handleOptionsToggle(entry.journalEntryId)}
+					>
+						<EllipsisVertical size={24} color="#fff" />
+					</TouchableOpacity>
 				</View>
-				<View
-					style={[
-						styles.dot,
-						{ backgroundColor: index % 2 === 0 ? "#66c2a5" : "#6A9ED6" },
-					]}
-				/>
-			</View>
-		</TouchableOpacity>
+
+				<View style={styles.entryRow}>
+					<View style={{ flex: 1 }}>
+						<Text style={styles.entryText} numberOfLines={1}>
+							{entry.title}
+						</Text>
+
+						{entry.mood && moodMap[entry.mood] && (
+							<Text style={{ fontSize: 18, marginTop: 4 }}>
+								{moodMap[entry.mood]}
+							</Text>
+						)}
+					</View>
+
+					<View
+						style={[
+							styles.dot,
+							{ backgroundColor: index % 2 === 0 ? "#66c2a5" : "#6A9ED6" },
+						]}
+					/>
+				</View>
+			</TouchableOpacity>
+		</Animated.View>
 	);
 
 	const renderOptionsMenu = () =>
