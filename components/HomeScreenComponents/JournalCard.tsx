@@ -2,10 +2,10 @@
 "use client";
 
 import { router } from "expo-router";
-import { EllipsisVertical } from "lucide-react-native";
 import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { DarkColors } from "../../constants/Colors";
+import { deleteJournal } from "../../lib/apiDeleteActions";
 
 const getDateString = (date: Date) => {
 	const options: Intl.DateTimeFormatOptions = {
@@ -16,7 +16,13 @@ const getDateString = (date: Date) => {
 	return date.toLocaleDateString("en-GB", options);
 };
 
-export default function JournalCard({ journal }: { journal: any }) {
+export default function JournalCard({
+	journal,
+	onDelete,
+}: {
+	journal: any;
+	onDelete?: () => void;
+}) {
 	const entries = journal.journalEntries?.$values || [];
 
 	const [showOptions, setShowOptions] = useState(false);
@@ -42,13 +48,32 @@ export default function JournalCard({ journal }: { journal: any }) {
 						},
 					})
 				}
+				onLongPress={() => {
+					Alert.alert(
+						"Delete Journal",
+						"Are you sure you want to delete this journal?",
+						[
+							{ text: "Cancel", style: "cancel" },
+							{
+								text: "Delete",
+								style: "destructive",
+								onPress: async () => {
+									const result = await deleteJournal(journal.journalId);
+									if (result) {
+										onDelete?.();
+									}
+								},
+							},
+						]
+					);
+				}}
 			>
 				<View style={styles.headerRow}>
 					<Text style={styles.title}>{journal.journalTitle}</Text>
 
-					<TouchableOpacity onPress={() => setShowOptions(true)}>
+					{/* <TouchableOpacity onPress={() => setShowOptions(true)}>
 						<EllipsisVertical size={18} color="#fff" />
-					</TouchableOpacity>
+					</TouchableOpacity> */}
 				</View>
 
 				{entries.length === 0 ? (

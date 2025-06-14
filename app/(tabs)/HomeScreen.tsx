@@ -140,7 +140,11 @@ export default function HomeScreen() {
 						journals
 							.slice(0, 3)
 							.map((journal) => (
-								<JournalCard key={journal.journalId} journal={journal} />
+								<JournalCard
+									key={journal.journalId}
+									journal={journal}
+									onDelete={fetchJournals}
+								/>
 							))
 					)}
 				</ScrollView>
