@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useCallback, useState } from "react";
 import {
 	ActivityIndicator,
@@ -17,6 +18,7 @@ import { getJournals, Journal } from "../../lib/apiGetActions";
 export default function JournalScreen() {
 	const [journals, setJournals] = useState<Journal[]>([]);
 	const [loading, setLoading] = useState(true);
+	const navigation = useNavigation<StackNavigationProp<any>>();
 
 	const fetchJournals = useCallback(async () => {
 		setLoading(true);
@@ -59,7 +61,7 @@ export default function JournalScreen() {
 						/>
 					</View>
 
-					<TouchableOpacity>
+					<TouchableOpacity onPress={() => navigation.navigate("PersonalInfo")}>
 						<Ionicons
 							name="person-circle"
 							size={28}
