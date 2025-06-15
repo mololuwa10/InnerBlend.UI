@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 import { router, useLocalSearchParams } from "expo-router";
 import { EllipsisVertical, Plus } from "lucide-react-native";
 import React, { useCallback, useRef, useState } from "react";
@@ -17,7 +17,6 @@ import {
 	View,
 } from "react-native";
 
-import { StackNavigationProp } from "@react-navigation/stack";
 import { DarkColors } from "../../constants/Colors";
 import { moodMap } from "../../constants/moodUtils";
 import { deleteJournalEntry } from "../../lib/apiDeleteActions";
@@ -44,7 +43,7 @@ export default function JournalView() {
 	>(null);
 	const entryRefs = useRef<{ [key: string]: any }>({});
 	const fadeAnim = useRef(new Animated.Value(1)).current;
-	const navigation = useNavigation<StackNavigationProp<any>>();
+	// const navigation = useNavigation<StackNavigationProp<any>>();
 
 	const fetchEntries = useCallback(async () => {
 		if (!journalId) return;
@@ -140,7 +139,17 @@ export default function JournalView() {
 		<Animated.View key={entry.journalEntryId} style={{ opacity: fadeAnim }}>
 			<TouchableOpacity
 				style={styles.entryCard}
-				onPress={() => navigation.navigate("Journal/CurrentEntryScreen")}
+				onPress={() =>
+					router.push({
+						pathname: "/Journal/CurrentEntryScreen",
+						params: {
+							journalId: entry.journalEntryId,
+							journalTitle: entry.title,
+							entries: JSON.stringify(entry),
+						},
+					})
+				}
+				// onPress={() => navigation.navigate("Journal/CurrentEntryScreen")}
 			>
 				<View style={styles.entryRow}>
 					<Text style={styles.entryDate}>
