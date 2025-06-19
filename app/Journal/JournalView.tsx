@@ -149,7 +149,6 @@ export default function JournalView() {
 						},
 					})
 				}
-				// onPress={() => navigation.navigate("Journal/CurrentEntryScreen")}
 			>
 				<View style={styles.entryRow}>
 					<Text style={styles.entryDate}>

@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
+	ActivityIndicator,
 	KeyboardAvoidingView,
 	Platform,
 	StyleSheet,
@@ -17,6 +17,10 @@ import MoodModal from "../../components/Modals/MoodModal";
 import TagModal from "../../components/Modals/TagModal";
 import Toolbar from "../../components/Modals/Toolbar";
 import { DarkColors } from "../../constants/Colors";
+import {
+	updateJournalEntry,
+	UpdateJournalEntryInput,
+} from "../../lib/apiPutActions";
 
 export default function CurrentEntryScreen() {
 	const router = useRouter();
@@ -32,7 +36,11 @@ export default function CurrentEntryScreen() {
 	const [mood, setMood] = useState("");
 	const [title, setTitle] = useState("");
 	const [loading, setLoading] = useState(false);
+	const [lastSaved, setLastSaved] = useState<Date | null>(null);
+	const [entryId, setEntryId] = useState<string | number>();
 	const params = useLocalSearchParams();
+
+	const autoSaveTimeoutRef = useRef<NodeJS.Timeout | number | null>(null);
 
 	const formattedDate = selectedDate
 		.toLocaleDateString("en-GB", {
@@ -42,38 +50,9 @@ export default function CurrentEntryScreen() {
 		})
 		.toUpperCase();
 
-	// const handleSave = async () => {
-	// 	// TODO: Save the entry to the database
-	// 	const journalId = params?.journalId as string;
-	// 	if (!journalId) {
-	// 		console.error("Missing Journal Id");
-	// 		alert("An unexpected error occurred. Please try again.");
-	// 		return;
-	// 	}
-
-	// 	if (!entry.trim()) {
-	// 		alert("Please enter a journal entry.");
-	// 		return;
-	// 	}
-
-	// 	const success = await createJournalEntry(journalId, {
-	// 		// Title: `Entry on ${formattedDate}`,
-	// 		Title: title,
-	// 		Content: entry,
-	// 		Tags: tags,
-	// 		Mood: mood || null,
-	// 		Location: location || null,
-	// 	});
-
-	// 	if (success) {
-	// 		alert("Journal entry saved!");
-	// 		router.back();
-	// 	} else {
-	// 		alert(
-	// 			"Failed to save journal entry.\n\nEnsure Title and content are not empty."
-	// 		);
-	// 	}
-	// };
+	useEffect(() => {
+		console.log("Received route params:", params);
+	}, [params]);
 
 	useEffect(() => {
 		if (!params?.entries) return;
@@ -81,6 +60,7 @@ export default function CurrentEntryScreen() {
 		try {
 			const parsedEntry = JSON.parse(params.entries as string);
 
+			setEntryId(parsedEntry.journalEntryId || "");
 			setEntry(parsedEntry.content || "");
 			setTitle(parsedEntry.title || "");
 			setMood(parsedEntry.mood || "");
@@ -97,6 +77,99 @@ export default function CurrentEntryScreen() {
 			setLocation(params.location as string);
 		}
 	}, [params?.location]);
+
+	const handleUpdate = async () => {
+		if (!entryId) {
+			console.error("Missing Entry Id");
+			alert("An unexpected error occurred. Please try again.");
+			return;
+		}
+
+		if (!title.trim() || !entry.trim()) {
+			alert("Please ensure both title and content are filled.");
+			return;
+		}
+
+		// Validate or cast mood
+		const validMoods = [
+			"VerySad",
+			"Sad",
+			"Neutral",
+			"Happy",
+			"VeryHappy",
+		] as const;
+		const isValidMood = validMoods.includes(mood as any);
+
+		setLoading(true);
+
+		const updatePayload = {
+			title,
+			content: entry,
+			mood: isValidMood ? (mood as UpdateJournalEntryInput["mood"]) : undefined,
+			location: location || undefined,
+			tags: tags.length > 0 ? tags : undefined,
+		};
+
+		try {
+			const success = await updateJournalEntry(String(entryId), updatePayload);
+
+			if (success) {
+				alert("Journal entry updated successfully.");
+				router.back();
+			} else {
+				alert("Failed to update journal entry. Try again.");
+			}
+		} catch (error) {
+			console.error("Error updating entry:", error);
+			alert("Something went wrong. Please try again.");
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		if (!entryId || !title || !entry) return;
+
+		// Clear previous timeout if user is still typing
+		if (autoSaveTimeoutRef.current) {
+			clearTimeout(autoSaveTimeoutRef.current);
+		}
+		autoSaveTimeoutRef.current = setTimeout(async () => {
+			try {
+				const validMoods = [
+					"VerySad",
+					"Sad",
+					"Neutral",
+					"Happy",
+					"VeryHappy",
+				] as const;
+
+				const isValidMood = validMoods.includes(mood as any);
+
+				await updateJournalEntry(String(entryId), {
+					title,
+					content: entry,
+					mood: isValidMood
+						? (mood as UpdateJournalEntryInput["mood"])
+						: undefined,
+					location,
+					tags,
+				});
+
+				console.log("Auto-saved at", new Date().toLocaleTimeString());
+				setLastSaved(new Date());
+			} catch (error) {
+				console.error("Auto-save failed:", error);
+			}
+		}, 1000);
+
+		// Clear timeout on unmount
+		return () => {
+			if (autoSaveTimeoutRef.current) {
+				clearTimeout(autoSaveTimeoutRef.current);
+			}
+		};
+	}, [title, entry, mood, location, tags, entryId]);
 
 	return (
 		<>
@@ -135,13 +208,33 @@ export default function CurrentEntryScreen() {
 				behavior={Platform.OS === "ios" ? "padding" : undefined}
 			>
 				<View style={styles.header}>
-					<TouchableOpacity onPress={() => console.log("Saved")}>
-						<Ionicons
-							name="checkmark"
-							color={DarkColors.textPrimary}
-							size={24}
-						/>
+					<TouchableOpacity onPress={handleUpdate} disabled={loading}>
+						{loading ? (
+							<ActivityIndicator
+								size={"large"}
+								color={DarkColors.textPrimary}
+							/>
+						) : (
+							<Ionicons
+								name="checkmark"
+								color={DarkColors.textPrimary}
+								size={24}
+							/>
+						)}
 					</TouchableOpacity>
+
+					{lastSaved && (
+						<Text
+							style={{
+								fontSize: 12,
+								color: "#888",
+								textAlign: "center",
+								marginVertical: 8,
+							}}
+						>
+							Last saved at {lastSaved.toLocaleTimeString()}
+						</Text>
+					)}
 
 					<TouchableOpacity
 						style={styles.dateRow}
