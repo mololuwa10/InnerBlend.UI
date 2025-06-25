@@ -25,8 +25,18 @@ export interface JournalEntry {
 	journalEntryTags: JournalEntryTag[];
 }
 
+export interface JournalViewParams {
+	journalId: string | number | undefined;
+	journalTitle: string;
+}
+
+export interface Position {
+	x: number;
+	y: number;
+}
+
 export interface Journal {
-	journalId: string;
+	journalId: string | number;
 	journalTitle: string;
 	journalDescription: string;
 	dateCreated: string;

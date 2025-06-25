@@ -2,7 +2,7 @@
 
 import { router } from "expo-router";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { DarkColors } from "../../constants/Colors";
 
 const getDateString = (date: Date) => {
@@ -32,15 +32,21 @@ export default function JournalPageCard({ journal }: { journal: any }) {
 					})
 				}
 			>
-				<Text style={styles.title}>{journal.journalTitle}</Text>
-				<Text style={styles.description}>{journal.journalDescription}</Text>
+				<View style={styles.titleContainer}>
+					<View style={{ flex: 1 }}>
+						<Text style={styles.title}>{journal.journalTitle}</Text>
+						<Text style={styles.journalDate}>
+							{getDateString(new Date(journal.dateCreated))}
+						</Text>
+					</View>
 
-				<Text style={styles.journalDate}>
-					{getDateString(new Date(journal.dateCreated))} .{" "}
-					{new Date(journal.dateCreated).toLocaleDateString("en-GB", {
-						weekday: "short",
-					})}
-				</Text>
+					<Image
+						source={{
+							uri: "https://plus.unsplash.com/premium_photo-1675813860520-5460c6209088?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+						}}
+						style={styles.image}
+					/>
+				</View>
 			</TouchableOpacity>
 		</>
 	);
@@ -56,9 +62,13 @@ const styles = StyleSheet.create({
 	journalDate: {
 		textAlign: "left",
 		color: DarkColors.textPrimary,
-		paddingVertical: 15,
+		paddingVertical: 8,
 		fontFamily: "ComicNeue-Regular",
 		fontSize: 14,
+	},
+	titleContainer: {
+		flex: 1,
+		flexDirection: "row",
 	},
 	title: {
 		color: DarkColors.textPrimary,
@@ -76,5 +86,11 @@ const styles = StyleSheet.create({
 		color: DarkColors.accent,
 		fontSize: 14,
 		fontFamily: "ComicNeue-Regular",
+	},
+	image: {
+		resizeMode: "center",
+		width: 120,
+		height: 80,
+		borderRadius: 20,
 	},
 });

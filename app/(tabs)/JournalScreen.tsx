@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { Plus } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
 import {
 	ActivityIndicator,
@@ -91,6 +92,19 @@ export default function JournalScreen() {
 						))
 					)}
 				</ScrollView>
+				{/* New Entry Button */}
+
+				<TouchableOpacity
+					style={styles.newEntryButton}
+					// onPress={() => setShowCreateJournalModal(true)}
+				>
+					                 
+					<View style={styles.newEntryWrapper}>
+						                     
+						<Plus color={DarkColors.textPrimary} size={22} />                   
+					</View>{" "}
+					           
+				</TouchableOpacity>
 			</View>
 		</>
 	);
@@ -154,4 +168,59 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		paddingHorizontal: 40,
 	},
+	newEntryButton: {
+		position: "absolute",
+		bottom: 20,
+		right: 20,
+		backgroundColor: DarkColors.buttonColor,
+		borderRadius: 40,
+		paddingVertical: 20,
+		paddingHorizontal: 20,
+	},
+	newEntryWrapper: {
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	newEntryText: {
+		color: DarkColors.textPrimary,
+		fontSize: 16,
+		fontFamily: "ComicNeue-Bold",
+	},
 });
+
+// <div class="flex items-center gap-4 bg-slate-50 px-4 min-h-[72px] py-2">
+// 	         {" "}
+// 	<div
+// 		class="text-[#0d141c] flex items-center justify-center rounded-lg bg-[#e7edf4] shrink-0 size-12"
+// 		data-icon="File"
+// 		data-size="24px"
+// 		data-weight="regular"
+// 	>
+// 		           {" "}
+// 		<svg
+// 			xmlns="http://www.w3.org/2000/svg"
+// 			width="24px"
+// 			height="24px"
+// 			fill="currentColor"
+// 			viewBox="0 0 256 256"
+// 		>
+// 			             {" "}
+// 			<path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Z"></path>
+// 			           {" "}
+// 		</svg>
+// 		         {" "}
+// 	</div>
+// 	         {" "}
+// 	<div class="flex flex-col justify-center">
+// 		           {" "}
+// 		<p class="text-[#0d141c] text-base font-medium leading-normal line-clamp-1">
+// 			My Trip to the Mountains
+// 		</p>
+// 		           {" "}
+// 		<p class="text-[#49739c] text-sm font-normal leading-normal line-clamp-2">
+// 			July 20, 2024
+// 		</p>
+// 		         {" "}
+// 	</div>
+// 	       {" "}
+// </div>;

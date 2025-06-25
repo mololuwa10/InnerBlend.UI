@@ -266,7 +266,6 @@ export default function CurrentEntryScreen() {
 					) : null}
 
 					<TextInput
-						// style={styles.titleInput}
 						style={{ color: "#ccc", marginBottom: 5, paddingHorizontal: 20 }}
 						value={title}
 						onChangeText={setTitle}

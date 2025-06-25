@@ -1,13 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { router, useLocalSearchParams } from "expo-router";
-import { EllipsisVertical, Plus } from "lucide-react-native";
-import React, { useCallback, useRef, useState } from "react";
+import { Plus } from "lucide-react-native";
+import React, { useMemo, useRef, useState } from "react";
 import {
 	Alert,
 	Animated,
 	Platform,
-	Pressable,
 	RefreshControl,
 	ScrollView,
 	StyleSheet,
@@ -17,62 +16,37 @@ import {
 	View,
 } from "react-native";
 
+import EntryCard from "../../components/JournalViewComponents/EntryCards";
+import OptionsMenu from "../../components/JournalViewComponents/OptionsMenu";
+import { useJournalEntries } from "../../components/JournalViewComponents/useJournalEntries";
 import { DarkColors } from "../../constants/Colors";
-import { moodMap } from "../../constants/moodUtils";
 import { deleteJournalEntry } from "../../lib/apiDeleteActions";
-import {
-	getJournalEntriesByJournalId,
-	JournalEntry,
-} from "../../lib/apiGetActions";
+import { JournalEntry, Position } from "../../lib/apiGetActions";
 
-export default function JournalView() {
-	const { journalId, journalTitle } = useLocalSearchParams() as {
-		journalId: string | number | undefined;
-		journalTitle: string;
-	};
+const JournalView: React.FC = () => {
+	const { journalId, journalTitle } = useLocalSearchParams();
+	const { journalEntries, isLoading, error, fetchEntries } =
+		useJournalEntries(journalId);
 
-	const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([]);
-	const [refreshing, setRefreshing] = useState(false);
 	const [search, setSearch] = useState("");
-	const [optionsPosition, setOptionsPosition] = useState<{
-		x: number;
-		y: number;
-	} | null>(null);
+	const [optionsPosition, setOptionsPosition] = useState<Position | null>(null);
 	const [selectedEntryId, setSelectedEntryId] = useState<
 		string | number | null
 	>(null);
-	const entryRefs = useRef<{ [key: string]: any }>({});
 	const fadeAnim = useRef(new Animated.Value(1)).current;
-	// const navigation = useNavigation<StackNavigationProp<any>>();
 
-	const fetchEntries = useCallback(async () => {
-		if (!journalId) return;
-
-		const result = await getJournalEntriesByJournalId(journalId.toString());
-
-		if (result?.$values?.length) {
-			const sorted = result.$values.sort(
-				(a, b) =>
-					new Date(b.dateCreated).getTime() - new Date(a.dateCreated).getTime()
-			);
-			setJournalEntries(sorted);
-		} else {
-			console.warn("Unexpected journal entry response:", result);
-			setJournalEntries([]);
-		}
-	}, [journalId]);
+	const filteredEntries = useMemo(() => {
+		if (!search) return journalEntries;
+		return journalEntries.filter((entry: { title: string }) =>
+			entry.title.toLowerCase().includes(search.toLowerCase())
+		);
+	}, [search, journalEntries]);
 
 	useFocusEffect(
-		useCallback(() => {
+		React.useCallback(() => {
 			fetchEntries();
 		}, [fetchEntries])
 	);
-
-	const onRefresh = async () => {
-		setRefreshing(true);
-		await fetchEntries();
-		setRefreshing(false);
-	};
 
 	const handleDeleteEntry = async (entryId: string | number) => {
 		if (!entryId) return;
@@ -99,128 +73,32 @@ export default function JournalView() {
 									useNativeDriver: true,
 								}).start();
 							}
-
-							//reset selected entry id
 							setSelectedEntryId(null);
 							setOptionsPosition(null);
 						});
-					} catch (error: any) {
-						console.error(error);
+					} catch (error) {
+						console.error("Error deleting entry:", error);
 					}
 				},
 			},
 		]);
 	};
 
-	const handleOptionsPress = (option: string) => {
-		if (!selectedEntryId) return;
-
-		setOptionsPosition(null);
-
-		if (option === "Move") {
-			console.log("Move");
-		} else if (option === "Delete") {
-			handleDeleteEntry(selectedEntryId);
-		} else {
-			console.log(option);
-		}
+	const handleEntryPress = (entry: JournalEntry) => {
+		router.push({
+			pathname: "/Journal/CurrentEntryScreen",
+			params: {
+				journalId: entry.journalEntryId,
+				journalTitle: entry.title,
+				entries: JSON.stringify(entry),
+			},
+		});
 	};
 
-	const handleOptionsToggle = (id: number | string) => {
-		entryRefs.current[id]?.measure?.(
-			(fx: any, fy: any, width: any, height: any, px: any, py: any) => {
-				setOptionsPosition({ x: px, y: py + height });
-				setSelectedEntryId(id);
-			}
-		);
+	const handleOptionsToggle = (id: string | number, position: Position) => {
+		setOptionsPosition(position);
+		setSelectedEntryId(id);
 	};
-
-	const renderEntryCard = (entry: JournalEntry, index: number) => (
-		<Animated.View key={entry.journalEntryId} style={{ opacity: fadeAnim }}>
-			<TouchableOpacity
-				style={styles.entryCard}
-				onPress={() =>
-					router.push({
-						pathname: "/Journal/CurrentEntryScreen",
-						params: {
-							journalId: entry.journalEntryId,
-							journalTitle: entry.title,
-							entries: JSON.stringify(entry),
-						},
-					})
-				}
-			>
-				<View style={styles.entryRow}>
-					<Text style={styles.entryDate}>
-						{new Date(entry.dateCreated).toLocaleDateString("en-GB", {
-							day: "2-digit",
-							month: "long",
-							year: "numeric",
-						})}
-					</Text>
-
-					<TouchableOpacity
-						ref={(ref) => {
-							entryRefs.current[entry.journalEntryId] = ref;
-						}}
-						onPress={() => handleOptionsToggle(entry.journalEntryId)}
-					>
-						<EllipsisVertical size={24} color="#fff" />
-					</TouchableOpacity>
-				</View>
-
-				<View style={styles.entryRow}>
-					<View style={{ flex: 1 }}>
-						<Text style={styles.entryText} numberOfLines={1}>
-							{entry.title}
-						</Text>
-
-						{entry.mood && moodMap[entry.mood] && (
-							<Text style={{ fontSize: 18, marginTop: 4 }}>
-								{moodMap[entry.mood]}
-							</Text>
-						)}
-					</View>
-
-					<View
-						style={[
-							styles.dot,
-							{ backgroundColor: index % 2 === 0 ? "#66c2a5" : "#6A9ED6" },
-						]}
-					/>
-				</View>
-			</TouchableOpacity>
-		</Animated.View>
-	);
-
-	const renderOptionsMenu = () =>
-		optionsPosition &&
-		selectedEntryId && (
-			<Pressable
-				style={StyleSheet.absoluteFill}
-				onPress={() => setOptionsPosition(null)}
-			>
-				<View
-					style={[
-						styles.optionsContainer,
-						{ top: optionsPosition.y, left: optionsPosition.x - 160 },
-					]}
-				>
-					{["Move", "Delete"].map((option) => (
-						<TouchableOpacity
-							key={option}
-							style={styles.option}
-							onPress={() => {
-								handleOptionsPress(option);
-								setOptionsPosition(null);
-							}}
-						>
-							<Text style={styles.optionText}>{option}</Text>
-						</TouchableOpacity>
-					))}
-				</View>
-			</Pressable>
-		);
 
 	return (
 		<View style={styles.wrapper}>
@@ -233,7 +111,7 @@ export default function JournalView() {
 				<View style={styles.searchContainer}>
 					<Ionicons name="search" color={DarkColors.textPrimary} size={18} />
 					<TextInput
-						placeholder="Search"
+						placeholder="Search Entries"
 						placeholderTextColor={DarkColors.accent}
 						style={styles.searchInput}
 						value={search}
@@ -246,7 +124,7 @@ export default function JournalView() {
 			<ScrollView
 				style={styles.container}
 				refreshControl={
-					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+					<RefreshControl refreshing={isLoading} onRefresh={fetchEntries} />
 				}
 			>
 				<View style={styles.journalCard}>
@@ -256,10 +134,28 @@ export default function JournalView() {
 
 				<Text style={styles.sectionTitle}>Recent Entries</Text>
 
-				{journalEntries.length === 0 ? (
-					<Text style={styles.emptyText}>No entries found.</Text>
+				{error ? (
+					<Text style={styles.errorText}>{error}</Text>
+				) : filteredEntries.length === 0 ? (
+					<Text style={styles.emptyText}>
+						{search ? "No matching entries found" : "No entries yet"}
+					</Text>
 				) : (
-					journalEntries.map(renderEntryCard)
+					filteredEntries.map((entry: any, index: any) => (
+						<Animated.View
+							key={entry.journalEntryId}
+							style={{ opacity: fadeAnim }}
+						>
+							<EntryCard
+								entry={entry}
+								index={index}
+								onPress={() => handleEntryPress(entry)}
+								onOptionsPress={(id: any) =>
+									handleOptionsToggle(id, { x: 0, y: 0 })
+								}
+							/>
+						</Animated.View>
+					))
 				)}
 			</ScrollView>
 
@@ -279,10 +175,22 @@ export default function JournalView() {
 				</View>
 			</TouchableOpacity>
 
-			{renderOptionsMenu()}
+			{/* Options Menu */}
+			{optionsPosition && selectedEntryId && (
+				<OptionsMenu
+					position={optionsPosition}
+					onClose={() => setOptionsPosition(null)}
+					onSelect={(option: string) => {
+						if (option === "Delete" && selectedEntryId) {
+							handleDeleteEntry(selectedEntryId);
+						}
+						setOptionsPosition(null);
+					}}
+				/>
+			)}
 		</View>
 	);
-}
+};
 
 const styles = StyleSheet.create({
 	wrapper: {
@@ -293,7 +201,7 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		paddingTop: 25,
-		paddingHorizontal: 15,
+		paddingHorizontal: 20,
 		paddingBottom: 120,
 	},
 	header: {
@@ -341,38 +249,15 @@ const styles = StyleSheet.create({
 		color: DarkColors.textPrimary,
 		marginBottom: 12,
 	},
-	entryCard: {
-		backgroundColor: "#2A2A33",
-		borderRadius: 16,
-		padding: 16,
-		marginBottom: 16,
-	},
-	entryRow: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-		marginBottom: 10,
-	},
-	entryDate: {
-		color: DarkColors.accent,
-		fontFamily: "ComicNeue-Regular",
-		marginBottom: 6,
-	},
-	entryText: {
-		color: DarkColors.textPrimary,
-		fontFamily: "ComicNeue-Regular",
-		fontSize: 15,
-		flex: 1,
-	},
-	dot: {
-		width: 10,
-		height: 10,
-		borderRadius: 5,
-		marginLeft: 10,
-	},
 	emptyText: {
 		fontFamily: "ComicNeue-Regular",
 		color: DarkColors.accent,
+		textAlign: "center",
+		marginTop: 30,
+	},
+	errorText: {
+		fontFamily: "ComicNeue-Regular",
+		color: "red",
 		textAlign: "center",
 		marginTop: 30,
 	},
@@ -396,20 +281,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		gap: 6,
 	},
-	optionsContainer: {
-		backgroundColor: "#333",
-		borderRadius: 10,
-		paddingVertical: 10,
-		paddingHorizontal: 20,
-		width: 200,
-		position: "absolute",
-	},
-	option: {
-		paddingVertical: 10,
-	},
-	optionText: {
-		color: DarkColors.textPrimary,
-		fontFamily: "ComicNeue-Regular",
-		fontSize: 16,
-	},
 });
+
+export default JournalView;
