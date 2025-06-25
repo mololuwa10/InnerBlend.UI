@@ -16,8 +16,8 @@ import {
 	View,
 } from "react-native";
 
-import EntryCard from "../../components/JournalViewComponents/EntryCards";
 import OptionsMenu from "../../components/JournalViewComponents/OptionsMenu";
+import SwipeableCard from "../../components/JournalViewComponents/SwipeableCard";
 import { useJournalEntries } from "../../components/JournalViewComponents/useJournalEntries";
 import { DarkColors } from "../../constants/Colors";
 import { deleteJournalEntry } from "../../lib/apiDeleteActions";
@@ -100,6 +100,11 @@ const JournalView: React.FC = () => {
 		setSelectedEntryId(id);
 	};
 
+	const handleMoveEntry = (entryId: string | number) => {
+		// Implement your move logic here
+		console.log("Move entry:", entryId);
+	};
+
 	return (
 		<View style={styles.wrapper}>
 			{/* Header */}
@@ -146,13 +151,12 @@ const JournalView: React.FC = () => {
 							key={entry.journalEntryId}
 							style={{ opacity: fadeAnim }}
 						>
-							<EntryCard
+							<SwipeableCard
 								entry={entry}
 								index={index}
 								onPress={() => handleEntryPress(entry)}
-								onOptionsPress={(id: any) =>
-									handleOptionsToggle(id, { x: 0, y: 0 })
-								}
+								onDelete={() => handleDeleteEntry(entry.journalEntryId)}
+								onMove={() => handleMoveEntry(entry.journalEntryId)}
 							/>
 						</Animated.View>
 					))
