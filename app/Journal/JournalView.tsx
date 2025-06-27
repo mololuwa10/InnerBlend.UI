@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { router, useLocalSearchParams } from "expo-router";
@@ -36,7 +37,9 @@ const JournalView: React.FC = () => {
 	const fadeAnim = useRef(new Animated.Value(1)).current;
 
 	const filteredEntries = useMemo(() => {
-		if (!search) return journalEntries;
+		if (!search) {
+			return journalEntries;
+		}
 		return journalEntries.filter((entry: { title: string }) =>
 			entry.title.toLowerCase().includes(search.toLowerCase())
 		);
@@ -49,7 +52,9 @@ const JournalView: React.FC = () => {
 	);
 
 	const handleDeleteEntry = async (entryId: string | number) => {
-		if (!entryId) return;
+		if (!entryId) {
+			return;
+		}
 
 		Alert.alert("Delete Entry", "Are you sure you want to delete this entry?", [
 			{ text: "Cancel", style: "cancel" },
@@ -212,8 +217,8 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "space-between",
-		marginBottom: 20,
-		paddingHorizontal: 20,
+		// marginBottom: 10,
+		paddingHorizontal: 15,
 		gap: 10,
 	},
 	searchContainer: {
@@ -235,7 +240,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#2A2A33",
 		borderRadius: 20,
 		padding: 24,
-		marginBottom: 30,
+		marginBottom: 20,
 	},
 	journalTitle: {
 		fontFamily: "ComicNeue-Bold",
