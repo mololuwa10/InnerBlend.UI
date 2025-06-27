@@ -277,8 +277,8 @@ const styles = StyleSheet.create({
 		borderRadius: 30,
 		alignSelf: "center",
 		position: "absolute",
-		bottom: 30,
-		right: 10,
+		bottom: 40,
+		right: 15,
 	},
 	newEntryText: {
 		color: DarkColors.textPrimary,
