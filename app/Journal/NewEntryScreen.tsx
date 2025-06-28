@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
@@ -10,6 +11,7 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import Toast from "react-native-toast-message";
 import DateModal from "../../components/Modals/DateModal";
 import LocationModal from "../../components/Modals/LocationModal";
 import MoodModal from "../../components/Modals/MoodModal";
@@ -23,6 +25,7 @@ export default function NewEntryScreen() {
 	const [entry, setEntry] = useState("");
 	const [showTagsModal, setShowTagsModal] = useState(false);
 	const [tags, setTags] = useState<string[]>([]);
+	const [pickedFiles, setPickedFiles] = useState<any[]>([]);
 	const [tagInput, setTagInput] = useState("");
 	const [showDateModal, setShowDateModal] = useState(false);
 	const [selectedDate, setSelectedDate] = useState(new Date());
@@ -41,6 +44,36 @@ export default function NewEntryScreen() {
 		})
 		.toUpperCase();
 
+	const handlePickImage = async () => {
+		const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+		if (status !== "granted") {
+			Toast.show({
+				type: "error",
+				text1: "Permission Denied",
+				text2: "We need access to your photos to add images.",
+			});
+			return;
+		}
+
+		const result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			// aspect: [4, 3],
+			quality: 1,
+		});
+
+		if (!result.canceled && result.assets && result.assets.length > 0) {
+			setPickedFiles((prevFiles) => [...prevFiles, result.assets[0].uri]);
+		} else {
+			Toast.show({
+				type: "error",
+				text1: "Error",
+				text2: "Failed to pick image.",
+			});
+		}
+	};
+
 	const handleSave = async () => {
 		// TODO: Save the entry to the database
 		const journalId = params?.journalId as string;
@@ -55,22 +88,30 @@ export default function NewEntryScreen() {
 			return;
 		}
 
-		const success = await createJournalEntry(journalId, {
-			// Title: `Entry on ${formattedDate}`,
-			Title: title,
-			Content: entry,
-			Tags: tags,
-			Mood: mood || null,
-			Location: location || null,
-		});
+		// const files = pickedFiles;
+
+		const success = await createJournalEntry(
+			journalId,
+			{
+				Title: title,
+				Content: entry,
+				Tags: tags,
+				Mood: mood || null,
+				Location: location || null,
+			},
+			pickedFiles
+		);
 
 		if (success) {
-			alert("Journal entry saved!");
+			Toast.show({ type: "success", text1: "Journal entry saved!" });
 			router.back();
 		} else {
-			alert(
-				"Failed to save journal entry.\n\nEnsure Title and content are not empty."
-			);
+			Toast.show({
+				type: "error",
+				text1: "Error",
+				text2:
+					"Failed to save journal entry.\n\nEnsure Title and content are not empty.",
+			});
 		}
 	};
 
@@ -178,6 +219,7 @@ export default function NewEntryScreen() {
 					onTagPress={() => setShowTagsModal(true)}
 					onLocationPress={() => setShowLocationModal(true)}
 					onMoodPress={() => setShowMoodModal(true)}
+					onImagePress={handlePickImage}
 				/>
 			</KeyboardAvoidingView>
 		</>

@@ -175,7 +175,7 @@ export default function CurrentEntryScreen() {
 			} catch (error) {
 				console.error("Auto-save failed:", error);
 			}
-		}, 1000);
+		}, 2000);
 
 		// Clear timeout on unmount
 		return () => {
@@ -302,6 +302,7 @@ export default function CurrentEntryScreen() {
 					onTagPress={() => setShowTagsModal(true)}
 					onLocationPress={() => setShowLocationModal(true)}
 					onMoodPress={() => setShowMoodModal(true)}
+					onImagePress={() => console.log("Implement image picker")}
 				/>
 			</KeyboardAvoidingView>
 		</>

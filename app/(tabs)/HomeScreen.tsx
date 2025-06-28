@@ -1,8 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import * as ImagePicker from "expo-image-picker";
 import { ListFilter, Plus } from "lucide-react-native";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
 	ActivityIndicator,
 	ScrollView,
@@ -34,6 +35,17 @@ export default function HomeScreen() {
 	const [showCreateJournalModal, setShowCreateJournalModal] = useState(false);
 
 	const navigation = useNavigation<StackNavigationProp<any>>();
+
+	useEffect(() => {
+		const checkPermissions = async () => {
+			const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
+			if (status !== "granted") {
+				await ImagePicker.requestMediaLibraryPermissionsAsync();
+			}
+		};
+
+		checkPermissions();
+	}, []);
 
 	const fetchJournals = useCallback(async () => {
 		setLoading(true);

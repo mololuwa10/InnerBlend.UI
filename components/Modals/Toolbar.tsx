@@ -8,10 +8,12 @@ export default function Toolbar({
 	onTagPress,
 	onLocationPress,
 	onMoodPress,
+	onImagePress,
 }: {
 	onTagPress: () => void;
 	onLocationPress: () => void;
 	onMoodPress: () => void;
+	onImagePress: () => void;
 }) {
 	// const icons: (
 	// 	| "image-outline"
@@ -37,7 +39,7 @@ export default function Toolbar({
 					/>
 				</TouchableOpacity>
 			))} */}
-			<TouchableOpacity onPress={() => console.log("Image")}>
+			<TouchableOpacity onPress={onImagePress}>
 				<Ionicons name="image-outline" size={24} color={DarkColors.highlight} />
 			</TouchableOpacity>
 

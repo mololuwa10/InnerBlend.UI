@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
+import { ImagePickerAsset } from "expo-image-picker";
 
 export interface Tag {
 	tagId: string;
@@ -60,7 +61,9 @@ export const createJournal = async (
 ): Promise<boolean | null> => {
 	try {
 		const token = await AsyncStorage.getItem("token");
-		if (!token) throw new Error("No token found");
+		if (!token) {
+			throw new Error("No token found");
+		}
 
 		const response = await fetch(`http://${ip}:5183/api/journal`, {
 			method: "POST",
@@ -90,11 +93,39 @@ export const createJournal = async (
 // Create Journal Entry // POST: api/journalentry/journalId
 export const createJournalEntry = async (
 	journalId: string,
-	entryData: JournalEntryInput
+	entryData: JournalEntryInput,
+	files?: ImagePickerAsset[]
 ): Promise<boolean | null> => {
 	try {
 		const token = await AsyncStorage.getItem("token");
-		if (!token) throw new Error("No token found");
+		if (!token) {
+			throw new Error("No token found");
+		}
+
+		const formData = new FormData();
+
+		formData.append("Title", entryData.Title);
+		formData.append("Content", entryData.Content);
+		if (entryData.Location) {
+			formData.append("Location", entryData.Location);
+		}
+		if (entryData.Mood) {
+			formData.append("Mood", entryData.Mood);
+		}
+
+		entryData.Tags?.forEach((tag) => {
+			formData.append("Tags", tag);
+		});
+
+		if (files && files.length > 0) {
+			files.forEach((file, index) => {
+				formData.append("Files", {
+					uri: file.uri,
+					name: `photo_${Date.now()}_${index}.jpg`,
+					type: file.type || "image/jpeg",
+				} as any);
+			});
+		}
 
 		const response = await fetch(
 			`http://${ip}:5183/api/journalentry/journal/${journalId}`,
@@ -102,7 +133,7 @@ export const createJournalEntry = async (
 				method: "POST",
 				headers: {
 					Authorization: `Bearer ${token}`,
-					"Content-Type": "application/json",
+					// "Content-Type": "application/json",
 				},
 				body: JSON.stringify(entryData),
 			}
@@ -113,6 +144,7 @@ export const createJournalEntry = async (
 			console.error("Failed to create journal entry:", errorMsg);
 			return false;
 		}
+
 		return true;
 	} catch (error: any) {
 		console.error("Error creating journal entry:", error.message);
