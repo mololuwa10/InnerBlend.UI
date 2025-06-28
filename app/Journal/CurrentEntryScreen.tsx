@@ -11,6 +11,7 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import Toast from "react-native-toast-message";
 import DateModal from "../../components/Modals/DateModal";
 import LocationModal from "../../components/Modals/LocationModal";
 import MoodModal from "../../components/Modals/MoodModal";
@@ -55,7 +56,9 @@ export default function CurrentEntryScreen() {
 	}, [params]);
 
 	useEffect(() => {
-		if (!params?.entries) return;
+		if (!params?.entries) {
+			return;
+		}
 
 		try {
 			const parsedEntry = JSON.parse(params.entries as string);
@@ -114,26 +117,37 @@ export default function CurrentEntryScreen() {
 			const success = await updateJournalEntry(String(entryId), updatePayload);
 
 			if (success) {
-				alert("Journal entry updated successfully.");
+				Toast.show({
+					type: "success",
+					text1: "Entry Updated",
+					// text2: "Something went wrong. Please try again.",
+				});
 				router.back();
 			} else {
 				alert("Failed to update journal entry. Try again.");
 			}
 		} catch (error) {
 			console.error("Error updating entry:", error);
-			alert("Something went wrong. Please try again.");
+			Toast.show({
+				type: "error",
+				text1: "Update Failed",
+				text2: "Something went wrong. Please try again.",
+			});
 		} finally {
 			setLoading(false);
 		}
 	};
 
 	useEffect(() => {
-		if (!entryId || !title || !entry) return;
+		if (!entryId || !title || !entry) {
+			return;
+		}
 
 		// Clear previous timeout if user is still typing
 		if (autoSaveTimeoutRef.current) {
 			clearTimeout(autoSaveTimeoutRef.current);
 		}
+
 		autoSaveTimeoutRef.current = setTimeout(async () => {
 			try {
 				const validMoods = [

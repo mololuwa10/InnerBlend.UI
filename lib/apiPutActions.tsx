@@ -109,7 +109,9 @@ export const updateJournal = async (
 ): Promise<boolean | null> => {
 	try {
 		const token = await AsyncStorage.getItem("token");
-		if (!token) throw new Error("No token found");
+		if (!token) {
+			throw new Error("No token found");
+		}
 
 		const response = await fetch(`http://${ip}:5183/api/journal/${journalId}`, {
 			method: "PUT",
@@ -126,8 +128,7 @@ export const updateJournal = async (
 			return false;
 		}
 
-		const data = await response.json();
-		return data;
+		return true;
 	} catch (error: any) {
 		console.error("There was an error updating journal: ", error);
 		return null;
@@ -142,8 +143,10 @@ export const updateJournalEntry = async (
 	update: UpdateJournalEntryInput
 ): Promise<boolean | null> => {
 	try {
-		const token = AsyncStorage.getItem("token");
-		if (!token) throw new Error("No token found");
+		const token = await AsyncStorage.getItem("token");
+		if (!token) {
+			throw new Error("No token found");
+		}
 
 		const response = await fetch(
 			`http://${ip}:5183/api/journalentry/${entryId}`,
@@ -159,12 +162,13 @@ export const updateJournalEntry = async (
 
 		if (!response.ok) {
 			const errorMsg = await response.text();
-			console.error("Failed to update journal entry:", errorMsg);
+			console.error(
+				`Failed to update journal entry. Status: ${response.status} - ${response.statusText}. Message: ${errorMsg}`
+			);
 			return false;
 		}
 
-		const data = await response.json();
-		return data;
+		return true;
 	} catch (error: any) {
 		console.error("There was an error updating journal entry: ", error);
 		return null;
@@ -178,7 +182,9 @@ export const moveJournalEntry = async (
 ): Promise<boolean | null> => {
 	try {
 		const token = await AsyncStorage.getItem("token");
-		if (!token) throw new Error("No token found");
+		if (!token) {
+			throw new Error("No token found");
+		}
 
 		const payload: MoveJournalEntry = {
 			entryId,

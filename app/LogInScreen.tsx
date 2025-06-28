@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Colors } from "../constants/Colors";
-import { useLogin } from "../lib/auth";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { router } from "expo-router";
@@ -16,6 +14,8 @@ import {
 	TouchableOpacity,
 } from "react-native";
 import Toast from "react-native-toast-message";
+import { Colors } from "../constants/Colors";
+import { useLogin } from "../lib/auth";
 
 export default function LogInScreen() {
 	const navigation = useNavigation<StackNavigationProp<any>>();
