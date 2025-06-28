@@ -8,6 +8,7 @@ import {
 	TextInput,
 	TouchableOpacity,
 } from "react-native";
+import Toast from "react-native-toast-message";
 import { DarkColors } from "../../constants/Colors";
 import { createJournal } from "../../lib/apiPostActions";
 export default function CreateJournalModal({
@@ -38,7 +39,7 @@ export default function CreateJournalModal({
 
 		setLoading(false);
 		if (success) {
-			alert("Journal created!");
+			Toast.show({ type: "success", text1: "Journal created!!" });
 			setTitle("");
 			setDescription("");
 			onClose();
@@ -84,7 +85,6 @@ export default function CreateJournalModal({
 								<Text style={styles.buttonText}>Save Journal</Text>
 							)}
 						</TouchableOpacity>
-
 					</Pressable>
 				</Pressable>
 			</Modal>
