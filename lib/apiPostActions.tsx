@@ -119,23 +119,25 @@ export const createJournalEntry = async (
 
 		if (files && files.length > 0) {
 			files.forEach((file, index) => {
-				formData.append("Files", {
-					uri: file.uri,
-					name: `photo_${Date.now()}_${index}.jpg`,
-					type: file.type || "image/jpeg",
-				} as any);
+				if (file?.uri) {
+					formData.append("Files", {
+						uri: file.uri,
+						name: `photo_${Date.now()}_${index}.jpg`,
+						type: file.type || "image/jpeg",
+					} as any);
+				}
 			});
 		}
 
 		const response = await fetch(
-			`http://${ip}:5183/api/journalentry/journal/${journalId}`,
+			`http://${ip}:5183/api/journalentry/${journalId}/journal`,
 			{
 				method: "POST",
 				headers: {
 					Authorization: `Bearer ${token}`,
-					// "Content-Type": "application/json",
+					"Content-Type": "multipart/form-data",
 				},
-				body: JSON.stringify(entryData),
+				body: formData,
 			}
 		);
 

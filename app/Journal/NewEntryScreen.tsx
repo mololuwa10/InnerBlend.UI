@@ -1,10 +1,13 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { Trash2 } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
+	Image,
 	KeyboardAvoidingView,
 	Platform,
+	ScrollView,
 	StyleSheet,
 	Text,
 	TextInput,
@@ -34,6 +37,7 @@ export default function NewEntryScreen() {
 	const [showMoodModal, setShowMoodModal] = useState(false);
 	const [mood, setMood] = useState("");
 	const [title, setTitle] = useState("");
+	const [selectedPreview, setSelectedPreview] = useState<string | null>(null);
 	const params = useLocalSearchParams();
 
 	const formattedDate = selectedDate
@@ -113,6 +117,10 @@ export default function NewEntryScreen() {
 					"Failed to save journal entry.\n\nEnsure Title and content are not empty.",
 			});
 		}
+	};
+
+	const handleRemoveImage = (index: number) => {
+		setPickedFiles((prev) => prev.filter((_, i) => i !== index));
 	};
 
 	useEffect(() => {
@@ -205,7 +213,10 @@ export default function NewEntryScreen() {
 					/>
 
 					<TextInput
-						style={styles.input}
+						style={[
+							styles.input,
+							pickedFiles.length === 0 && styles.textInputExpanded,
+						]}
 						value={entry}
 						onChangeText={setEntry}
 						placeholder="Start journaling..."
@@ -213,6 +224,37 @@ export default function NewEntryScreen() {
 						multiline
 						textAlignVertical="top"
 					/>
+
+					<View
+						style={{
+							borderBottomColor: "#444",
+							borderBottomWidth: 1,
+							marginBottom: 5,
+						}}
+					/>
+
+					{pickedFiles.length > 0 && (
+						<ScrollView
+							horizontal
+							showsHorizontalScrollIndicator={false}
+							style={styles.imagePreviewContainer}
+						>
+							{pickedFiles.map((uri, index) => (
+								<View key={index} style={styles.imageWrapper}>
+									<TouchableOpacity
+										style={styles.deleteButton}
+										onPress={() => handleRemoveImage(index)}
+									>
+										<Trash2 size={20} color={DarkColors.textPrimary} />
+									</TouchableOpacity>
+
+									<TouchableOpacity onPress={() => setSelectedPreview(uri)}>
+										<Image source={{ uri }} style={styles.imagePreview} />
+									</TouchableOpacity>
+								</View>
+							))}
+						</ScrollView>
+					)}
 				</View>
 
 				<Toolbar
@@ -222,6 +264,20 @@ export default function NewEntryScreen() {
 					onImagePress={handlePickImage}
 				/>
 			</KeyboardAvoidingView>
+
+			{selectedPreview && (
+				<TouchableOpacity
+					style={styles.fullscreenContainer}
+					onPress={() => setSelectedPreview(null)}
+					activeOpacity={1}
+				>
+					<Image
+						source={{ uri: selectedPreview }}
+						style={styles.fullscreenImage}
+						resizeMode="contain"
+					/>
+				</TouchableOpacity>
+			)}
 		</>
 	);
 }
@@ -261,5 +317,59 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		borderRadius: 10,
 		padding: 16,
+	},
+	textInputExpanded: {
+		flex: 1,
+	},
+	imagePreviewContainer: {
+		paddingHorizontal: 10,
+		paddingVertical: 10,
+		maxHeight: 100,
+	},
+
+	imagePreview: {
+		width: 80,
+		height: 80,
+		borderRadius: 10,
+		marginRight: 10,
+	},
+	fullscreenContainer: {
+		position: "absolute",
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		backgroundColor: "rgba(0,0,0,0.9)",
+		justifyContent: "center",
+		alignItems: "center",
+		zIndex: 99,
+	},
+	fullscreenImage: {
+		width: "100%",
+		height: "100%",
+	},
+	imageWrapper: {
+		position: "relative",
+		marginRight: 10,
+	},
+
+	deleteButton: {
+		position: "absolute",
+		top: -5,
+		right: -5,
+		zIndex: 1,
+		backgroundColor: "#ff5555",
+		borderRadius: 12,
+		width: 30,
+		height: 30,
+		justifyContent: "center",
+		alignItems: "center",
+		elevation: 3,
+	},
+
+	deleteButtonText: {
+		color: "#fff",
+		fontSize: 14,
+		fontWeight: "bold",
 	},
 });
