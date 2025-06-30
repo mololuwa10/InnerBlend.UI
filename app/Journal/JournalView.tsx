@@ -69,12 +69,6 @@ const JournalView: React.FC = () => {
 							prev.filter((entry) => entry.journalEntryId !== entryId)
 						);
 
-						Animated.timing(fadeAnim, {
-							toValue: 0,
-							duration: 300,
-							useNativeDriver: true,
-						}).start();
-
 						// Proceed with deletion from backend
 						const success = await deleteJournalEntry(entryId);
 						if (!success) {
@@ -82,8 +76,8 @@ const JournalView: React.FC = () => {
 							fetchEntries(); // fallback
 						}
 
-						// setSelectedEntryId(null);
-						// setOptionsPosition(null);
+						setSelectedEntryId(null);
+						setOptionsPosition(null);
 					} catch (error) {
 						console.error("Error deleting entry:", error);
 					}
