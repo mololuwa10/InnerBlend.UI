@@ -55,7 +55,9 @@ const ip =
 export const getJournals = async (): Promise<Journal[]> => {
 	try {
 		const token = await AsyncStorage.getItem("token");
-		if (!token) throw new Error("No token found");
+		if (!token) {
+			throw new Error("No token found");
+		}
 
 		const response = await fetch(`http://${ip}:5183/api/journal`, {
 			method: "GET",
@@ -88,7 +90,9 @@ export const getJournalById = async (
 ): Promise<Journal | null> => {
 	try {
 		const token = await AsyncStorage.getItem("token");
-		if (!token) throw new Error("No token found");
+		if (!token) {
+			throw new Error("No token found");
+		}
 
 		const response = await fetch(`http://${ip}:5183/api/journal/${journalId}`, {
 			method: "GET",
@@ -121,7 +125,9 @@ export const getJournalEntryById = async (
 ): Promise<JournalEntry | null> => {
 	try {
 		const token = await AsyncStorage.getItem("token");
-		if (!token) throw new Error("No token found");
+		if (!token) {
+			throw new Error("No token found");
+		}
 
 		const response = await fetch(
 			`http://${ip}:5183/api/journalentry/${entryId}`,
@@ -154,7 +160,9 @@ export const getJournalEntriesByJournalId = async (
 ): Promise<{ $id: string; $values: JournalEntry[] } | null> => {
 	try {
 		const token = await AsyncStorage.getItem("token");
-		if (!token) throw new Error("No token found");
+		if (!token) {
+			throw new Error("No token found");
+		}
 
 		const response = await fetch(
 			`http://${ip}:5183/api/journalentry/journal/${journalId}`,

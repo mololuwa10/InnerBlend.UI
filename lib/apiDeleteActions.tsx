@@ -51,7 +51,9 @@ export const deleteJournalEntry = async (
 	entryId: string | number
 ): Promise<boolean | null> => {
 	const token = await AsyncStorage.getItem("token");
-	if (!token) throw new Error("No token found");
+	if (!token) {
+		throw new Error("No token found");
+	}
 
 	try {
 		const response = await fetch(
@@ -99,7 +101,9 @@ export const deleteJournal = async (
 ): Promise<boolean | null> => {
 	try {
 		const token = await AsyncStorage.getItem("token");
-		if (!token) throw new Error("No token found");
+		if (!token) {
+			throw new Error("No token found");
+		}
 
 		const response = await fetch(`http://${ip}:5183/api/journal/${journalId}`, {
 			method: "DELETE",

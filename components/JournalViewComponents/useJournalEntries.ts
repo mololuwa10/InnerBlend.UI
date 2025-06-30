@@ -7,7 +7,7 @@ export const useJournalEntries = (journalId: string |string[] | number | undefin
   const [error, setError] = useState<string | null>(null);
 
   const fetchEntries = useCallback(async () => {
-    if (!journalId) return;
+    if (!journalId) {return};
 
     setIsLoading(true);
     setError(null);
@@ -31,5 +31,5 @@ export const useJournalEntries = (journalId: string |string[] | number | undefin
     }
   }, [journalId]);
 
-  return { journalEntries, isLoading, error, fetchEntries };
+  return { journalEntries, setJournalEntries, isLoading, error, fetchEntries };
 };

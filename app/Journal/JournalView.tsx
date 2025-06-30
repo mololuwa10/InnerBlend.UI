@@ -26,7 +26,7 @@ import { JournalEntry, Position } from "../../lib/apiGetActions";
 
 const JournalView: React.FC = () => {
 	const { journalId, journalTitle } = useLocalSearchParams();
-	const { journalEntries, isLoading, error, fetchEntries } =
+	const { journalEntries, isLoading, error, fetchEntries, setJournalEntries } =
 		useJournalEntries(journalId);
 
 	const [search, setSearch] = useState("");
@@ -56,6 +56,8 @@ const JournalView: React.FC = () => {
 			return;
 		}
 
+		const original = [...journalEntries];
+
 		Alert.alert("Delete Entry", "Are you sure you want to delete this entry?", [
 			{ text: "Cancel", style: "cancel" },
 			{
@@ -63,24 +65,25 @@ const JournalView: React.FC = () => {
 				style: "destructive",
 				onPress: async () => {
 					try {
+						setJournalEntries((prev) =>
+							prev.filter((entry) => entry.journalEntryId !== entryId)
+						);
+
 						Animated.timing(fadeAnim, {
 							toValue: 0,
 							duration: 300,
 							useNativeDriver: true,
-						}).start(async () => {
-							const success = await deleteJournalEntry(entryId);
-							if (success) {
-								fetchEntries();
-							} else {
-								Animated.timing(fadeAnim, {
-									toValue: 1,
-									duration: 300,
-									useNativeDriver: true,
-								}).start();
-							}
-							setSelectedEntryId(null);
-							setOptionsPosition(null);
-						});
+						}).start();
+
+						// Proceed with deletion from backend
+						const success = await deleteJournalEntry(entryId);
+						if (!success) {
+							// Rollback: put entry back if deletion failed
+							fetchEntries(); // fallback
+						}
+
+						// setSelectedEntryId(null);
+						// setOptionsPosition(null);
 					} catch (error) {
 						console.error("Error deleting entry:", error);
 					}
