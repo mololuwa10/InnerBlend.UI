@@ -28,7 +28,9 @@ export default function NewEntryScreen() {
 	const [entry, setEntry] = useState("");
 	const [showTagsModal, setShowTagsModal] = useState(false);
 	const [tags, setTags] = useState<string[]>([]);
-	const [pickedFiles, setPickedFiles] = useState<any[]>([]);
+	const [pickedFiles, setPickedFiles] = useState<
+		ImagePicker.ImagePickerAsset[]
+	>([]);
 	const [tagInput, setTagInput] = useState("");
 	const [showDateModal, setShowDateModal] = useState(false);
 	const [selectedDate, setSelectedDate] = useState(new Date());
@@ -38,6 +40,7 @@ export default function NewEntryScreen() {
 	const [mood, setMood] = useState("");
 	const [title, setTitle] = useState("");
 	const [selectedPreview, setSelectedPreview] = useState<string | null>(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const params = useLocalSearchParams();
 
 	const formattedDate = selectedDate
@@ -68,7 +71,7 @@ export default function NewEntryScreen() {
 		});
 
 		if (!result.canceled && result.assets && result.assets.length > 0) {
-			setPickedFiles((prevFiles) => [...prevFiles, result.assets[0].uri]);
+			setPickedFiles((prevFiles) => [...prevFiles, result.assets[0]]);
 		} else {
 			Toast.show({
 				type: "error",
@@ -80,6 +83,11 @@ export default function NewEntryScreen() {
 
 	const handleSave = async () => {
 		// TODO: Save the entry to the database
+		if (isSubmitting) {
+			return;
+		}
+		setIsSubmitting(true);
+
 		const journalId = params?.journalId as string;
 		if (!journalId) {
 			console.error("Missing Journal Id");
@@ -93,6 +101,11 @@ export default function NewEntryScreen() {
 		}
 
 		// const files = pickedFiles;
+		const filesToUpload = pickedFiles.map((file) => ({
+			uri: file.uri,
+			fileName: file.fileName ?? `image-${Date.now()}.jpg`,
+			type: file.type ?? "image/jpeg",
+		}));
 
 		const success = await createJournalEntry(
 			journalId,
@@ -103,7 +116,7 @@ export default function NewEntryScreen() {
 				Mood: mood || null,
 				Location: location || null,
 			},
-			pickedFiles
+			filesToUpload
 		);
 
 		if (success) {
@@ -117,6 +130,7 @@ export default function NewEntryScreen() {
 					"Failed to save journal entry.\n\nEnsure Title and content are not empty.",
 			});
 		}
+		setIsSubmitting(false);
 	};
 
 	const handleRemoveImage = (index: number) => {
@@ -124,7 +138,7 @@ export default function NewEntryScreen() {
 	};
 
 	useEffect(() => {
-		if (params.location) {
+		if (params.location && typeof params.location === "string") {
 			setLocation(params.location as string);
 		}
 	}, [params?.location]);
@@ -166,7 +180,10 @@ export default function NewEntryScreen() {
 				behavior={Platform.OS === "ios" ? "padding" : undefined}
 			>
 				<View style={styles.header}>
-					<TouchableOpacity onPress={handleSave}>
+					<TouchableOpacity
+						onPress={handleSave}
+						disabled={!entry.trim() || !title.trim()}
+					>
 						<Ionicons
 							name="checkmark"
 							color={DarkColors.textPrimary}
@@ -188,24 +205,14 @@ export default function NewEntryScreen() {
 				</View>
 
 				<View style={styles.body}>
-					{mood ? (
-						<Text
-							style={{ color: "#ccc", marginBottom: 5, paddingHorizontal: 20 }}
-						>
-							Mood: {mood}
-						</Text>
-					) : null}
+					{mood ? <Text style={styles.metaText}>Mood: {mood}</Text> : null}
 					{location ? (
-						<Text
-							style={{ color: "#ccc", marginBottom: 5, paddingHorizontal: 20 }}
-						>
-							Location: {location}
-						</Text>
+						<Text style={styles.metaText}>Location: {location}</Text>
 					) : null}
 
 					<TextInput
 						// style={styles.titleInput}
-						style={{ color: "#ccc", marginBottom: 5, paddingHorizontal: 20 }}
+						style={styles.metaText}
 						value={title}
 						onChangeText={setTitle}
 						placeholder="Title..."
@@ -239,7 +246,7 @@ export default function NewEntryScreen() {
 							showsHorizontalScrollIndicator={false}
 							style={styles.imagePreviewContainer}
 						>
-							{pickedFiles.map((uri, index) => (
+							{pickedFiles.map((file, index) => (
 								<View key={index} style={styles.imageWrapper}>
 									<TouchableOpacity
 										style={styles.deleteButton}
@@ -248,8 +255,13 @@ export default function NewEntryScreen() {
 										<Trash2 size={20} color={DarkColors.textPrimary} />
 									</TouchableOpacity>
 
-									<TouchableOpacity onPress={() => setSelectedPreview(uri)}>
-										<Image source={{ uri }} style={styles.imagePreview} />
+									<TouchableOpacity
+										onPress={() => setSelectedPreview(file.uri)}
+									>
+										<Image
+											source={{ uri: file.uri }}
+											style={styles.imagePreview}
+										/>
 									</TouchableOpacity>
 								</View>
 							))}
@@ -372,4 +384,5 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		fontWeight: "bold",
 	},
+	metaText: { color: "#ccc", marginBottom: 5, paddingHorizontal: 20 },
 });

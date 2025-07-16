@@ -1,6 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
-import { ImagePickerAsset } from "expo-image-picker";
 
 export interface Tag {
 	tagId: string;
@@ -87,17 +86,19 @@ export const createJournal = async (
 		return false;
 	}
 };
-// ==============================================================================
+// ===============================================================================
 
-// JOURNAL ENTRIES ==============================================================
+// JOURNAL ENTRIES ===============================================================
 // Create Journal Entry // POST: api/journalentry/journalId
 export const createJournalEntry = async (
 	journalId: string,
 	entryData: JournalEntryInput,
-	files?: ImagePickerAsset[]
+	// files?: ImagePickerAsset[]
+	files?: { uri: string; fileName: string; type: string }[]
 ): Promise<boolean | null> => {
 	try {
 		const token = await AsyncStorage.getItem("token");
+
 		if (!token) {
 			throw new Error("No token found");
 		}
@@ -106,6 +107,7 @@ export const createJournalEntry = async (
 
 		formData.append("Title", entryData.Title);
 		formData.append("Content", entryData.Content);
+
 		if (entryData.Location) {
 			formData.append("Location", entryData.Location);
 		}
@@ -120,10 +122,13 @@ export const createJournalEntry = async (
 		if (files && files.length > 0) {
 			files.forEach((file, index) => {
 				if (file?.uri) {
+					const uriParts = file.uri.split(".");
+					const fileType = uriParts[uriParts.length - 1];
+
 					formData.append("Files", {
 						uri: file.uri,
-						name: `photo_${Date.now()}_${index}.jpg`,
-						type: file.type || "image/jpeg",
+						name: file.fileName || `image_${Date.now()}.${fileType}`,
+						type: file.type || `image/${fileType}`,
 					} as any);
 				}
 			});
@@ -135,7 +140,7 @@ export const createJournalEntry = async (
 				method: "POST",
 				headers: {
 					Authorization: `Bearer ${token}`,
-					"Content-Type": "multipart/form-data",
+					// "Content-Type": "multipart/form-data",
 				},
 				body: formData,
 			}
