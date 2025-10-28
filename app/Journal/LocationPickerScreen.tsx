@@ -68,6 +68,7 @@ export default function LocationPickerScreen() {
 			params: { location: selectedAddress },
 		});
 	};
+
 	return (
 		<>
 			<View style={styles.container}>
