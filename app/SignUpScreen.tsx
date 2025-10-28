@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { Colors } from "@/constants/Colors";
 import { registerUser } from "@/lib/auth";
 import { useNavigation } from "@react-navigation/native";
@@ -8,6 +6,7 @@ import { router } from "expo-router";
 import { CheckCircle, Eye, EyeClosed } from "lucide-react-native";
 import React, { useState } from "react";
 import {
+	ActivityIndicator,
 	Alert,
 	KeyboardAvoidingView,
 	Platform,
@@ -90,6 +89,7 @@ export default function SignUpScreen() {
 
 	const SignUp = async () => {
 		if (validate()) {
+			setIsLoading(true);
 			try {
 				const userData = {
 					FirstName: firstName,
@@ -105,7 +105,6 @@ export default function SignUpScreen() {
 					text1: "Registration Successful",
 					text2: "Welcome To Inner Blend!",
 				});
-				setIsLoading(false);
 				router.push("/(tabs)/HomeScreen");
 				// navigation.navigate("Navigation");
 			} catch (error) {
@@ -115,6 +114,8 @@ export default function SignUpScreen() {
 					text2: "Please check your credentials and try again.",
 				});
 				console.log("Registration Error", (error as Error).message);
+			} finally {
+				setIsLoading(false);
 			}
 		} else {
 			Alert.alert("Validation Error", "Please correct the errors in the form.");
@@ -236,10 +237,17 @@ export default function SignUpScreen() {
 							/>
 						)}
 					</View>
-					{/* Removed global Switch - per-field eye icon toggles are used above */}
 					{/* Signup Button */}
-					<TouchableOpacity style={styles.signupButton} onPress={SignUp}>
-						<Text style={styles.signupButtonText}>SIGN UP</Text>
+					<TouchableOpacity
+						style={[styles.signupButton, isLoading && { opacity: 0.8 }]}
+						onPress={SignUp}
+						disabled={isLoading}
+					>
+						{isLoading ? (
+							<ActivityIndicator size="small" color="#fff" />
+						) : (
+							<Text style={styles.signupButtonText}>SIGN UP</Text>
+						)}
 					</TouchableOpacity>
 					{/* Divider */}
 					<Text style={styles.orText}>or</Text>
@@ -272,7 +280,7 @@ const styles = StyleSheet.create({
 		// justifyContent: "center",
 		paddingHorizontal: 20,
 		paddingBottom: 100,
-		paddingVertical: 30,
+		paddingVertical: 60,
 	},
 	title: {
 		fontSize: 35,
