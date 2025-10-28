@@ -276,8 +276,6 @@ const styles = StyleSheet.create({
 	container: {
 		flexGrow: 1,
 		backgroundColor: Colors.background,
-		// alignItems: "center",
-		// justifyContent: "center",
 		paddingHorizontal: 20,
 		paddingBottom: 100,
 		paddingVertical: 60,
