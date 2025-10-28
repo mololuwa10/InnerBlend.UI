@@ -12,7 +12,7 @@
       "supportsTablet": true
     },
     "extra": {
-      "apiHost": "192.168.0.32"
+      "apiHost": "192.168.0.19"
     },
     "android": {
       "adaptiveIcon": {
@@ -43,7 +43,8 @@
         {
           "locationAlwaysAndWhenInUsePermission": "Allow InnerBlend to access your location."
         }
-      ]
+      ],
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true
