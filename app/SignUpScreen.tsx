@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { Colors } from "@/constants/Colors";
@@ -6,7 +5,7 @@ import { registerUser } from "@/lib/auth";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { router } from "expo-router";
-import { CheckCircle } from "lucide-react-native";
+import { CheckCircle, Eye, EyeClosed } from "lucide-react-native";
 import React, { useState } from "react";
 import {
 	Alert,
@@ -31,6 +30,8 @@ export default function SignUpScreen() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
+	const [showPassword, setShowPassword] = useState(false);
+	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [errors, setErrors] = useState({
 		firstname: "",
@@ -189,24 +190,44 @@ export default function SignUpScreen() {
 						<Text style={styles.errorText}>{errors.username}</Text>
 					) : null}
 					{/* Password */}
-					<TextInput
-						placeholder="Password"
-						secureTextEntry
-						style={styles.input}
-						value={password}
-						onChangeText={setPassword}
-						placeholderTextColor={Colors.accent}
-					/>
+					<View style={styles.confirmPasswordContainer}>
+						<TextInput
+							placeholder="Password"
+							secureTextEntry={!showPassword}
+							style={styles.confirmInput}
+							value={password}
+							onChangeText={setPassword}
+							placeholderTextColor={Colors.accent}
+						/>
+
+						<TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+							<Text style={styles.showPasswordText}>
+								{showPassword ? <EyeClosed /> : <Eye />}
+							</Text>
+						</TouchableOpacity>
+					</View>
+					{errors.password ? (
+						<Text style={styles.errorText}>{errors.password}</Text>
+					) : null}
 					{/* Confirm Password */}
 					<View style={styles.confirmPasswordContainer}>
 						<TextInput
 							placeholder="Confirm Password"
-							secureTextEntry
+							secureTextEntry={!showConfirmPassword}
 							style={styles.confirmInput}
 							value={confirmPassword}
 							onChangeText={setConfirmPassword}
 							placeholderTextColor={Colors.accent}
 						/>
+
+						<TouchableOpacity
+							onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+						>
+							<Text style={styles.showPasswordText}>
+								{showConfirmPassword ? <EyeClosed /> : <Eye />}
+							</Text>
+						</TouchableOpacity>
+
 						{isPasswordMatch && (
 							<CheckCircle
 								size={24}
@@ -215,6 +236,7 @@ export default function SignUpScreen() {
 							/>
 						)}
 					</View>
+					{/* Removed global Switch - per-field eye icon toggles are used above */}
 					{/* Signup Button */}
 					<TouchableOpacity style={styles.signupButton} onPress={SignUp}>
 						<Text style={styles.signupButtonText}>SIGN UP</Text>
@@ -333,6 +355,17 @@ const styles = StyleSheet.create({
 		color: Colors.accent,
 		textAlign: "center",
 		marginTop: 10,
+		fontFamily: "ComicNeue-Regular",
+	},
+	showPasswordContainer: {
+		flexDirection: "row",
+		alignItems: "center",
+		marginBottom: 15,
+	},
+	showPasswordText: {
+		marginLeft: 10,
+		fontSize: 16,
+		color: Colors.accent,
 		fontFamily: "ComicNeue-Regular",
 	},
 });
