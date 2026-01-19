@@ -12,7 +12,7 @@
       "supportsTablet": true
     },
     "extra": {
-      "apiHost": "192.168.0.19"
+      "apiHost": "192.168.12.143"
     },
     "android": {
       "adaptiveIcon": {
