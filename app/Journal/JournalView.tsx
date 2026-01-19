@@ -41,14 +41,14 @@ const JournalView: React.FC = () => {
 			return journalEntries;
 		}
 		return journalEntries.filter((entry: { title: string }) =>
-			entry.title.toLowerCase().includes(search.toLowerCase())
+			entry.title.toLowerCase().includes(search.toLowerCase()),
 		);
 	}, [search, journalEntries]);
 
 	useFocusEffect(
 		React.useCallback(() => {
 			fetchEntries();
-		}, [fetchEntries])
+		}, [fetchEntries]),
 	);
 
 	const handleDeleteEntry = async (entryId: string | number) => {
@@ -66,7 +66,7 @@ const JournalView: React.FC = () => {
 				onPress: async () => {
 					try {
 						setJournalEntries((prev) =>
-							prev.filter((entry) => entry.journalEntryId !== entryId)
+							prev.filter((entry) => entry.journalEntryId !== entryId),
 						);
 
 						// Proceed with deletion from backend
@@ -176,7 +176,8 @@ const JournalView: React.FC = () => {
 				style={styles.newEntryButton}
 			>
 				<View style={styles.newEntryWrapper}>
-					<Plus color={DarkColors.textPrimary} size={22} />
+					{/* color={DarkColors.textPrimary} */}
+					<Plus size={22} />
 					<Text style={styles.newEntryText}>New Entry</Text>
 				</View>
 			</TouchableOpacity>

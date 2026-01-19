@@ -56,7 +56,7 @@ export default function HomeScreen() {
 				const sortedData = [...data].sort(
 					(a, b) =>
 						new Date(b.dateCreated).getTime() -
-						new Date(a.dateCreated).getTime()
+						new Date(a.dateCreated).getTime(),
 				);
 				setJournals(sortedData);
 			}
@@ -70,7 +70,7 @@ export default function HomeScreen() {
 	useFocusEffect(
 		useCallback(() => {
 			fetchJournals();
-		}, [fetchJournals])
+		}, [fetchJournals]),
 	);
 
 	return (
@@ -133,7 +133,8 @@ export default function HomeScreen() {
 					<View style={styles.journalFilterContainer}>
 						<Text style={styles.journalFilter}>Journals</Text>
 						<TouchableOpacity>
-							<ListFilter size={28} color={DarkColors.textPrimary} />
+							{/* color={DarkColors.textPrimary} */}
+							<ListFilter size={28} />
 						</TouchableOpacity>
 					</View>
 
@@ -172,7 +173,8 @@ export default function HomeScreen() {
 					onPress={() => setShowCreateJournalModal(true)}
 				>
 					<View style={styles.newEntryWrapper}>
-						<Plus color={DarkColors.textPrimary} size={22} />
+						{/* color={DarkColors.textPrimary} */}
+						<Plus size={22} />
 						<Text style={styles.newEntryText}>New Journal</Text>
 					</View>
 				</TouchableOpacity>

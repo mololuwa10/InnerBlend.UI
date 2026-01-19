@@ -19,10 +19,10 @@ const { width } = Dimensions.get("window");
 
 export default function CalendarViewScreen() {
 	const [selectedDate, setSelectedDate] = useState(
-		new Date().toISOString().split("T")[0]
+		new Date().toISOString().split("T")[0],
 	);
-	const [showSearch, setShowSearch] = useState(true);
-	const [scrollY, setScrollY] = useState(0);
+	// const [showSearch, setShowSearch] = useState(true);
+	// const [scrollY, setScrollY] = useState(0);
 	const navigation = useNavigation<StackNavigationProp<any>>();
 
 	const renderEntry = ({ item }: { item: { id: number; text: string } }) => (
@@ -111,7 +111,8 @@ export default function CalendarViewScreen() {
 
 					<TouchableOpacity style={styles.fabPrimary}>
 						<View style={styles.newEntryWrapper}>
-							<Plus color={DarkColors.textPrimary} size={22} />
+							{/* color={DarkColors.textPrimary} */}
+							<Plus size={22} />
 							<Text style={styles.newEntryText}>New Entry</Text>
 						</View>
 					</TouchableOpacity>
